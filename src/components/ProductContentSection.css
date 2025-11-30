@@ -1,0 +1,109 @@
+/* src/components/ProductContentSection.css */
+
+.product-content-section {
+  padding: 60px 20px;
+  background-color: #f8f8f8; /* Farklı bir arka plan rengi */
+  margin-bottom: 60px;
+  border-radius: 20px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.product-content-section h2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.8em;
+  color: #00796b; /* Ana Vurgu Rengi */
+  margin-bottom: 30px;
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+}
+.product-content-section h2::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  transform: translateX(-50%);
+  width: 50%;
+  max-width: 300px;
+  height: 4px;
+  background-color: #00796b; /* Ana Vurgu Rengi */
+  border-radius: 2px;
+}
+
+.content-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Resmin sağda olması için flex-direction'ı tersine çeviriyoruz */
+.content-wrapper.right-image {
+  flex-direction: row-reverse; /* Bu satır resmin sağa gelmesini sağlar */
+}
+
+.image-container {
+  flex: 1;
+  min-width: 300px;
+  text-align: center;
+}
+
+.content-image {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.text-container {
+  flex: 2;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.1em;
+  line-height: 1.7;
+  color: #444;
+  text-align: left;
+}
+
+.text-container p {
+  margin-bottom: 15px;
+}
+
+/* Responsive Düzenlemeler */
+@media (max-width: 992px) {
+  .content-wrapper {
+    flex-direction: column; /* Tablet ve mobil için alt alta sırala */
+    text-align: center; /* Metni ortala */
+  }
+  .text-container {
+    text-align: center; /* Metni ortala */
+  }
+  .image-container {
+    margin-bottom: 20px;
+  }
+  .content-image {
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 576px) {
+  .product-content-section {
+    padding: 40px 15px;
+  }
+  .product-content-section h2 {
+    font-size: 2.2em;
+  }
+  .content-image {
+    max-width: 100%;
+  }
+  .text-container {
+    font-size: 1em;
+  }
+}

@@ -1,0 +1,252 @@
+/* src/components/AboutUsSection.css */
+
+.about-us-section {
+  background-color: transparent; /* Arka planı şeffaf yap */
+  max-width: 1400px; /* Ana .App genişliğiyle uyumlu */
+  margin-left: auto;
+  margin-right: auto; /* Kendini ortala */
+}
+
+/* AboutUsPage Stilleri */
+.about-page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 30px 20px 50px;
+}
+
+.about-page-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.about-page-header h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.2em;
+  color: #00796b;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.about-page-subtitle {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1em;
+  color: #666;
+  font-weight: 300;
+}
+
+.about-page-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+}
+
+.about-info-section {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  align-items: center;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.info-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+  transition: all 0.4s ease;
+  border-left: 4px solid #00796b;
+  flex: 1;
+  max-width: 320px;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.info-card.featured {
+  transform: scale(1.15) translateZ(50px);
+  box-shadow: 0 15px 35px rgba(0, 121, 107, 0.25);
+  z-index: 2;
+  border-left: 5px solid #00796b;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fffe 100%);
+}
+
+.info-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 121, 107, 0.15);
+}
+
+.info-card.featured:hover {
+  transform: scale(1.18) translateZ(50px) translateY(-5px);
+  box-shadow: 0 20px 45px rgba(0, 121, 107, 0.3);
+}
+
+.info-icon {
+  font-size: 2em;
+  margin-bottom: 12px;
+}
+
+.info-card h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.3em;
+  color: #00796b;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.info-card p {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.95em;
+  line-height: 1.6;
+  color: #555;
+  margin: 0;
+}
+
+/* Responsive Tasarım - AboutUsPage */
+@media (max-width: 992px) {
+  .about-info-section {
+    flex-direction: column;
+    gap: 25px;
+  }
+  
+  .info-card.featured {
+    transform: scale(1.05);
+  }
+  
+  .info-card.featured:hover {
+    transform: scale(1.08) translateY(-5px);
+  }
+  
+  .about-page-header h1 {
+    font-size: 2em;
+  }
+}
+
+@media (max-width: 576px) {
+  .about-page-container {
+    padding: 30px 15px 60px;
+  }
+  
+  .about-page-header h1 {
+    font-size: 2.2em;
+  }
+  
+  .about-page-subtitle {
+    font-size: 1.1em;
+  }
+  
+  .info-card {
+    padding: 25px;
+  }
+  
+  .info-card h3 {
+    font-size: 1.5em;
+  }
+  
+  .info-icon {
+    font-size: 2.5em;
+  }
+}
+
+/* Küçük İletişim Bölümü - Tüm Sayfalarda Kullanılacak */
+.mini-contact-section {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  margin-top: 60px;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mini-contact-section h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.8em;
+  color: #00796b;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.mini-contact-info {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.mini-contact-info span {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1em;
+  color: #555;
+}
+
+@media (max-width: 768px) {
+  .mini-contact-info {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .mini-contact-section {
+    padding: 20px;
+    margin-top: 40px;
+  }
+}
+
+.about-us-section h2 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 2.8em;
+  color: #00796b; /* Ana Vurgu Rengi */
+  margin-bottom: 30px;
+  position: relative;
+  display: inline-block;
+  width: 100%; /* Ortalamak için */
+  text-align: center;
+}
+
+.about-content {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 800px; /* Metnin çok yayılmasını engellemek için daha dar bir maksimum genişlik */
+  margin: 0 auto; /* İçeriği ortala */
+  justify-content: center; /* Metni yatayda ortala */
+}
+
+.about-text-container {
+  flex: none; /* Esnekliği kaldır */
+  width: 100%; /* Tam genişlik kullan */
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.1em;
+  line-height: 1.7;
+  color: #aedaa098;
+  text-align: center; /* Metni ortala */
+  padding: 0 20px; /* Yanlarda boşluk bırak */
+}
+
+.about-text-container p {
+  margin-bottom: 15px;
+}
+
+/* Responsive Düzenlemeler */
+@media (max-width: 992px) {
+  .about-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  .about-text-container {
+    text-align: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .about-us-section {
+    padding: 20px 15px; /* Daha az padding */
+  }
+  .about-text-container {
+    font-size: 1em;
+  }
+}

@@ -1,0 +1,327 @@
+/* src/components/ProductCarousel.css */
+
+/* Bu bileşene özel stiller */
+.product-carousel-section {
+  margin-bottom: 60px;
+  padding: 60px 20px;
+  overflow: visible;
+}
+
+.product-carousel-section h2 {
+  font-size: 2em;
+  color: #2c3e50;
+  margin-bottom: 50px;
+  position: relative;
+  text-align: center;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.product-carousel-section h2::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -10px;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #27ae60 0%, #229954 100%);
+  border-radius: 2px;
+}
+
+/* 3D Carousel Container */
+.product-carousel-3d-container {
+  position: relative;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 120px;
+  padding: 0 20px;
+}
+
+.product-carousel-3d {
+  position: relative;
+  width: 350px;
+  height: 430px;
+  perspective: 1500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 3D Product Cards */
+.product-card-3d {
+  position: absolute;
+  background: white;
+  padding: 25px 20px;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 300px;
+  height: 380px;
+  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+/* Önde (Aktif) */
+.product-card-3d.card-active {
+  transform: translateX(0) translateZ(0) scale(1);
+  opacity: 1;
+  z-index: 5;
+  pointer-events: auto;
+}
+
+.product-card-3d.card-active:hover {
+  transform: translateX(0) translateZ(0) scale(1.03);
+  box-shadow: 0 20px 50px rgba(0, 121, 107, 0.3);
+}
+
+/* Sağda 1. kart */
+.product-card-3d.card-right-1 {
+  transform: translateX(220px) translateZ(-180px) rotateY(-30deg) scale(0.75);
+  opacity: 0.6;
+  z-index: 4;
+  pointer-events: auto;
+}
+
+.product-card-3d.card-right-1:hover {
+  opacity: 0.8;
+  transform: translateX(220px) translateZ(-180px) rotateY(-30deg) scale(0.78);
+}
+
+/* Sağda 2. kart */
+.product-card-3d.card-right-2 {
+  transform: translateX(380px) translateZ(-340px) rotateY(-40deg) scale(0.55);
+  opacity: 0.4;
+  z-index: 3;
+  pointer-events: auto;
+}
+
+.product-card-3d.card-right-2:hover {
+  opacity: 0.6;
+  transform: translateX(380px) translateZ(-340px) rotateY(-40deg) scale(0.58);
+}
+
+/* Solda 1. kart */
+.product-card-3d.card-left-1 {
+  transform: translateX(-220px) translateZ(-180px) rotateY(30deg) scale(0.75);
+  opacity: 0.6;
+  z-index: 4;
+  pointer-events: auto;
+}
+
+.product-card-3d.card-left-1:hover {
+  opacity: 0.8;
+  transform: translateX(-220px) translateZ(-180px) rotateY(30deg) scale(0.78);
+}
+
+/* Solda 2. kart */
+.product-card-3d.card-left-2 {
+  transform: translateX(-380px) translateZ(-340px) rotateY(40deg) scale(0.55);
+  opacity: 0.4;
+  z-index: 3;
+  pointer-events: auto;
+}
+
+.product-card-3d.card-left-2:hover {
+  opacity: 0.6;
+  transform: translateX(-380px) translateZ(-340px) rotateY(40deg) scale(0.58);
+}
+
+/* Gizli */
+.product-card-3d.card-hidden {
+  transform: translateX(0) translateZ(-500px) scale(0.4);
+  opacity: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.product-image-3d {
+  width: 100%;
+  max-width: 220px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.product-card-3d h3 {
+  font-size: 1.3em;
+  margin: 10px 0 8px;
+  color: #2c3e50;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+}
+
+.product-card-3d .volume {
+  font-size: 0.9em;
+  color: #666;
+  margin-bottom: 8px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.product-card-3d .price {
+  font-size: 1.5em;
+  color: #E91E63;
+  font-weight: bold;
+  margin: 12px 0 15px;
+}
+
+.product-add-btn {
+  background: linear-gradient(135deg, #00796b, #004d40);
+  color: white;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 121, 107, 0.3);
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  letter-spacing: 0.5px;
+}
+
+.product-add-btn:hover {
+  background: linear-gradient(135deg, #004d40, #00251a);
+  box-shadow: 0 6px 20px rgba(0, 121, 107, 0.4);
+  transform: translateY(-2px);
+}
+
+.product-add-btn:active {
+  transform: translateY(0);
+}
+
+/* Navigation Buttons */
+.product-carousel-nav-btn {
+  position: relative;
+  background: rgba(255, 255, 255, 0.95);
+  color: #2c3e50;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.6em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  backdrop-filter: blur(10px);
+  flex-shrink: 0;
+}
+
+.product-carousel-nav-btn:hover {
+  background: white;
+  border-color: #27ae60;
+  color: #27ae60;
+  box-shadow: 0 6px 16px rgba(39, 174, 96, 0.2);
+  transform: scale(1.08);
+}
+
+.product-carousel-nav-btn:active {
+  transform: scale(0.95);
+}
+
+.product-carousel-nav-btn svg {
+  width: 26px;
+  height: 26px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .product-carousel-3d-container {
+    gap: 80px;
+  }
+  
+  .product-carousel-3d {
+    width: 380px;
+    height: 500px;
+  }
+  
+  .product-card-3d {
+    width: 320px;
+    height: 450px;
+  }
+  
+  .product-card-3d.card-right {
+    transform: translateX(260px) translateZ(-200px) rotateY(-35deg) scale(0.75);
+  }
+  
+  .product-card-3d.card-left {
+    transform: translateX(-260px) translateZ(-200px) rotateY(35deg) scale(0.75);
+  }
+}
+
+@media (max-width: 768px) {
+  .product-carousel-3d-container {
+    gap: 40px;
+  }
+  
+  .product-carousel-3d {
+    width: 300px;
+    height: 420px;
+  }
+  
+  .product-card-3d {
+    width: 280px;
+    height: 400px;
+    padding: 30px 20px;
+  }
+  
+  .product-image-3d {
+    max-width: 220px;
+    height: 180px;
+  }
+  
+  .product-card-3d h3 {
+    font-size: 1.3em;
+  }
+  
+  .product-card-3d.card-right {
+    transform: translateX(200px) translateZ(-150px) rotateY(-30deg) scale(0.7);
+  }
+  
+  .product-card-3d.card-left {
+    transform: translateX(-200px) translateZ(-150px) rotateY(30deg) scale(0.7);
+  }
+  
+  .product-carousel-nav-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 1.4em;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-carousel-3d {
+    width: 260px;
+    height: 380px;
+  }
+  
+  .product-card-3d {
+    width: 240px;
+    height: 360px;
+  }
+  
+  .product-image-3d {
+    max-width: 180px;
+    height: 150px;
+  }
+  
+  .product-carousel-nav-btn {
+    width: 40px;
+    height: 40px;
+  }
+}

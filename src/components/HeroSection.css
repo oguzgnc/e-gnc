@@ -1,0 +1,283 @@
+/* src/components/HeroSection.css */
+
+/* 3D Carousel Container */
+.hero-categories-only {
+  padding: 80px 20px;
+  margin-bottom: 40px;
+  overflow: visible;
+}
+
+.carousel-3d-container {
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 100px;
+  padding: 0 20px;
+}
+
+.carousel-3d {
+  position: relative;
+  width: 400px;
+  height: 450px;
+  perspective: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 3D Kategori Kartları */
+.category-card-3d {
+  position: absolute;
+  background: linear-gradient(135deg, #00796b, #004d40);
+  color: white;
+  padding: 50px 40px;
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  width: 320px;
+  height: 380px;
+  transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 0 15px 40px rgba(0, 121, 107, 0.4);
+  cursor: pointer;
+}
+
+/* Önde (Aktif) */
+.category-card-3d.card-active {
+  transform: translateX(0) translateZ(0) scale(1);
+  opacity: 1;
+  z-index: 3;
+  pointer-events: auto;
+}
+
+.category-card-3d.card-active:hover {
+  transform: translateX(0) translateZ(0) scale(1.05);
+  box-shadow: 0 20px 50px rgba(0, 121, 107, 0.6);
+}
+
+/* Sağda */
+.category-card-3d.card-right {
+  transform: translateX(280px) translateZ(-200px) rotateY(-35deg) scale(0.8);
+  opacity: 0.6;
+  z-index: 2;
+  pointer-events: auto;
+}
+
+.category-card-3d.card-right:hover {
+  opacity: 0.8;
+  transform: translateX(280px) translateZ(-200px) rotateY(-35deg) scale(0.85);
+}
+
+/* Solda */
+.category-card-3d.card-left {
+  transform: translateX(-280px) translateZ(-200px) rotateY(35deg) scale(0.8);
+  opacity: 0.6;
+  z-index: 2;
+  pointer-events: auto;
+}
+
+.category-card-3d.card-left:hover {
+  opacity: 0.8;
+  transform: translateX(-280px) translateZ(-200px) rotateY(35deg) scale(0.85);
+}
+
+/* Gizli */
+.category-card-3d.card-hidden {
+  transform: translateX(0) translateZ(-400px) scale(0.5);
+  opacity: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero-category-icon {
+  font-size: 5em;
+  margin-bottom: 25px;
+  transition: transform 0.3s ease;
+}
+
+.category-name-3d {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.8em;
+  font-weight: 700;
+  margin: 0;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Navigation Buttons */
+.carousel-nav-btn {
+  background: linear-gradient(135deg, #00796b, #004d40);
+  color: white;
+  border: none;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 2em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 20px rgba(0, 121, 107, 0.4);
+  z-index: 10;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.carousel-nav-btn:hover {
+  background: linear-gradient(135deg, #004d40, #00251a);
+  transform: scale(1.1);
+  box-shadow: 0 8px 25px rgba(0, 121, 107, 0.6);
+}
+
+.carousel-nav-btn:active {
+  transform: scale(0.95);
+}
+
+/* Dots Navigation */
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 40px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ccc;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dot.active {
+  background: #00796b;
+  width: 40px;
+  border-radius: 6px;
+}
+
+.dot:hover {
+  background: #00796b;
+  opacity: 0.7;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .carousel-3d-container {
+    gap: 60px;
+  }
+  
+  .carousel-3d {
+    width: 300px;
+    height: 380px;
+  }
+  
+  .category-card-3d {
+    width: 260px;
+    height: 320px;
+    padding: 40px 30px;
+  }
+  
+  .category-card-3d.card-right {
+    transform: translateX(220px) translateZ(-150px) rotateY(-35deg) scale(0.75);
+  }
+  
+  .category-card-3d.card-left {
+    transform: translateX(-220px) translateZ(-150px) rotateY(35deg) scale(0.75);
+  }
+  
+  .hero-category-icon {
+    font-size: 4em;
+  }
+  
+  .category-name-3d {
+    font-size: 1.5em;
+  }
+  
+  .carousel-nav-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 1.5em;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-categories-only {
+    padding: 60px 15px;
+  }
+  
+  .carousel-3d-container {
+    gap: 30px;
+  }
+  
+  .carousel-3d {
+    width: 250px;
+    height: 320px;
+  }
+  
+  .category-card-3d {
+    width: 220px;
+    height: 280px;
+    padding: 35px 25px;
+  }
+  
+  .category-card-3d.card-right {
+    transform: translateX(180px) translateZ(-120px) rotateY(-30deg) scale(0.7);
+  }
+  
+  .category-card-3d.card-left {
+    transform: translateX(-180px) translateZ(-120px) rotateY(30deg) scale(0.7);
+  }
+  
+  .hero-category-icon {
+    font-size: 3.5em;
+  }
+  
+  .category-name-3d {
+    font-size: 1.3em;
+  }
+  
+  .carousel-nav-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 1.3em;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-3d {
+    width: 200px;
+    height: 280px;
+  }
+  
+  .category-card-3d {
+    width: 180px;
+    height: 240px;
+    padding: 30px 20px;
+  }
+  
+  .category-card-3d.card-right,
+  .category-card-3d.card-left {
+    display: none;
+  }
+  
+  .hero-category-icon {
+    font-size: 3em;
+  }
+  
+  .category-name-3d {
+    font-size: 1.2em;
+  }
+  
+  .carousel-nav-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2em;
+  }
+}
+

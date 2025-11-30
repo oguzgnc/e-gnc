@@ -1,0 +1,148 @@
+/* src/App.css */
+
+/* Temel Reset ve Font Ayarları */
+body {
+  margin: 0; /* Tarayıcının varsayılan margin'ini sıfırlar */
+  font-family: 'Open Sans', sans-serif; /* Genel metinler için Open Sans */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f9f9f9; /* Açık gri bir arka plan */
+  color: #333; /* Koyu gri metin rengi */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Poppins', sans-serif; /* Tüm başlıklar için Poppins */
+  line-height: 1.2; /* Satır aralığını ayarlar */
+}
+
+/* Ana Uygulama Kabı */
+.App {
+  max-width: 1400px; /* Maksimum genişlik belirler, büyük ekranlarda içeriğin aşırı yayılmasını engeller */
+  margin: 0 auto;    /* Sayfayı yatayda ortalar */
+  padding: 0 20px;   /* Sol ve sağdan 20px iç boşluk (padding) ekler */
+  /* text-align: center; /* Genel metin ortalaması için bu satırı ekleyebilirsiniz,
+                           ancak spesifik elemanların kendi içlerindeki metinleri için daha detaylı ayar yaptık */
+}
+
+/* Hero Section Stilleri */
+
+/* Hero İçerik Kutusu */
+
+
+
+
+
+
+
+
+.shop-now-button:hover {
+  background-color: #bf730c; /* Sarı tonunun koyusu */
+}
+
+/* Kategoriler Bölümü Stilleri */
+.categories-section {
+  margin-bottom: 60px; /* Kategoriler bölümü ile footer arasına boşluk */
+}
+
+.categories-section h2 {
+  font-size: 2.5em;
+  color: #d84315; /* İkincil Vurgu Rengi */
+  margin-bottom: 30px;
+  position: relative;
+  display: inline-block; /* ::after sözde elemanının doğru konumlanması için */
+  width: 100%; /* Başlığın kapsayıcı genişliğini almasını sağlar */
+  text-align: center; /* Başlığı ortalar */
+}
+.categories-section h2::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background-color: #d84315; /* İkincil Vurgu Rengi */
+  border-radius: 2px;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 25px;
+  justify-content: center;
+}
+
+.category-card {
+  background-color: #fbf0e7; /* İkincil Vurgu Renginin çok açık tonu */
+  color: #333;
+  padding: 40px 20px;
+  border-radius: 15px;
+  font-size: 1.6em;
+  font-weight: bold;
+  text-align: center; /* Kart içindeki metni ortalar */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  background-color: #e3a68e; /* İkincil Vurgu Renginin daha koyu açık tonu */
+}
+
+/* Footer Stilleri */
+.footer {
+  background-color: #333;
+  color: white;
+  padding: 30px 20px;
+  margin-top: 60px;
+  border-top-left-radius: 50px;
+  border-top-right-radius: 50px;
+  text-align: center; /* Footer metnini ortalar */
+}
+
+.footer p {
+  margin: 0;
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
+/* Duyarlı Tasarım (Media Queries) */
+@media (max-width: 768px) {
+  .App {
+    padding: 0 15px; /* Küçük ekranlarda yan boşluğu biraz azaltırız */
+  }
+  .hero-content h1 {
+    font-size: 2.5em;
+  }
+  .hero-content p {
+    font-size: 1.2em;
+  }
+  .categories-section h2 {
+    font-size: 2em;
+  }
+}
+
+@media (max-width: 480px) {
+  .App {
+    padding: 0 10px; /* Çok küçük ekranlarda daha da azaltırız */
+  }
+  .hero-section {
+    padding: 60px 15px;
+  }
+  .hero-content h1 {
+    font-size: 2em;
+  }
+  .hero-content p {
+    font-size: 1em;
+  }
+  .shop-now-button {
+    padding: 10px 20px;
+    font-size: 1em;
+  }
+  .category-card {
+    padding: 30px 15px;
+    font-size: 1.4em;
+  }
+}

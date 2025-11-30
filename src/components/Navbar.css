@@ -1,0 +1,319 @@
+/* src/components/Navbar.css */
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff; /* Beyaz arka plan */
+  padding: 15px 60px; /* Sağ ve soldan daha fazla boşluk */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); /* Hafif gölge */
+  border-bottom-left-radius: 25px; /* Alt köşeleri yuvarlak */
+  border-bottom-right-radius: 25px;
+  position: sticky; /* Sayfa kaydırıldığında yukarıda kalır */
+  top: 0;
+  z-index: 1000; /* Diğer içeriklerin üzerinde görünür */
+}
+
+.navbar-brand .navbar-logo {
+  height: 65px; /* Logonun yüksekliğini büyüttük */
+  width: auto; /* Genişliği orantılı olarak ayarla */
+  object-fit: contain; /* Resmi kutuya sığdırır */
+}
+
+.navbar-brand a {
+  text-decoration: none;
+  color: #333;
+  font-size: 1.8em;
+  font-weight: bold;
+  font-family: 'Poppins', sans-serif;
+}
+
+.main-nav-links {
+  display: flex;
+  gap: 70px; /* Ana navigasyon linkleri arası boşluğu azalttık */
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #555; /* Daha yumuşak gri */
+  font-size: 1em; /* Yazı boyutunu küçülttük */
+  font-weight: 500; /* Biraz daha kalın */
+  padding: 8px 0; /* Tıklama alanı için padding */
+  transition: color 0.3s ease, border-bottom 0.3s ease;
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 0%;
+  height: 2px;
+  background-color: #4CAF50; /* Yeşil alt çizgi */
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #00796b; /* Yeşil hover rengi */
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+.nav-link.active {
+  color: #00796b; /* Aktif link rengi */
+  font-weight: 600;
+}
+
+.nav-link.active::after {
+  width: 100%;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* İkonlar arası boşluğu azalttık */
+  position: relative;
+}
+
+.nav-icon-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #555;
+  font-size: 0.8em; /* Yazı boyutunu küçülttük */
+  transition: color 0.3s ease;
+}
+
+.nav-icon {
+  font-size: 1.4em; /* İkon boyutunu küçülttük */
+  margin-bottom: 2px; /* İkon ile yazı arası boşluğu azalttık */
+  color: #666; /* Daha koyu gri ikon rengi */
+  transition: color 0.3s ease;
+}
+
+.nav-icon-link:hover .nav-icon,
+.nav-icon-link:hover span {
+  color: #00796b; /* Yeşil hover rengi */
+}
+
+.logout-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.logout-button:hover .nav-icon,
+.logout-button:hover span {
+  color: #e74c3c; /* Kırmızı hover rengi çıkış için */
+}
+
+.cart-link {
+  position: relative;
+}
+
+.cart-item-count {
+  background-color: #c0392b; /* Daha profesyonel kırmızımsı bildirim rengi */
+  color: white;
+  border-radius: 50%;
+  padding: 2px 7px;
+  font-size: 0.7em;
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* Hamburger menü ikonu başlangıçta gizli */
+.menu-icon {
+  display: none; 
+}
+
+.search-bar-container {
+  position: absolute;
+  top: calc(100% + 10px); /* Navbar'dan 10px aşağıda */
+  right: 0;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  width: 350px;
+  z-index: 1001;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  animation: slideDown 0.3s ease-out;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 0.95em;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  background-color: #ffffff;
+  font-family: 'Inter', sans-serif;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #00796b;
+  box-shadow: 0 0 0 3px rgba(0, 121, 107, 0.1);
+}
+
+.search-results-dropdown {
+  display: flex;
+  flex-direction: column;
+  max-height: 250px;
+  overflow-y: auto;
+  border-radius: 8px;
+  background-color: #ffffff;
+}
+
+.search-results-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.search-results-dropdown::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.search-results-dropdown::-webkit-scrollbar-thumb {
+  background: #00796b;
+  border-radius: 10px;
+}
+
+.search-results-dropdown::-webkit-scrollbar-thumb:hover {
+  background: #00564d;
+}
+
+.search-result-item {
+  padding: 14px 16px;
+  text-decoration: none;
+  color: #333;
+  border: none;
+  transition: all 0.3s ease;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  font-size: 0.95em;
+  background-color: #f8f9fa;
+  display: block;
+  font-weight: 500;
+}
+
+/* NavLink'in alt çizgisini kaldır */
+.search-result-item::after {
+  display: none !important;
+}
+
+/* Active state'i kaldır */
+.search-result-item.active {
+  color: #333;
+  font-weight: 500;
+  background-color: #f8f9fa;
+}
+
+.search-result-item:last-child {
+  margin-bottom: 0;
+}
+
+.search-result-item:hover,
+.search-result-item.active:hover {
+  background: linear-gradient(135deg, #00796b 0%, #00a89a 100%);
+  color: #ffffff !important;
+  transform: translateX(8px);
+  box-shadow: 0 4px 15px rgba(0, 121, 107, 0.25);
+}
+
+.search-results-dropdown.no-results {
+  padding: 16px 10px;
+  color: #999;
+  font-style: italic;
+  text-align: center;
+  font-size: 0.9em;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Düzenlemeler */
+
+@media (max-width: 992px) { /* Yeni bir kırılma noktası ekledik */
+  .main-nav-links {
+    display: none; /* Büyük ekranlarda göster, küçük ekranlarda gizle */
+  }
+  .navbar {
+    justify-content: space-between; /* Gizlendikten sonra markayı ve ikonları yay */
+    padding: 15px 15px; /* Yan boşlukları azalt */
+  }
+  .menu-icon {
+    display: flex; /* Hamburger menüyü göster */
+  }
+  .navbar-links {
+    gap: 15px; /* İkonlar arası boşluğu biraz arttırdık */
+  }
+  .nav-icon-link span {
+    display: none; /* İkon altındaki yazıları gizle */
+  }
+  .nav-icon {
+    font-size: 1.6em; /* Responsive ikon boyutu */
+  }
+  .search-bar-container {
+    width: 90%;
+    left: 5%;
+    right: 5%;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 15px 10px; /* Daha küçük ekranlarda daha az padding */
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .navbar-brand .navbar-logo {
+    height: 55px; /* Responsive logo boyutu */
+  }
+  .nav-icon {
+    font-size: 1.4em; /* Daha küçük ekranlarda ikon boyutu */
+  }
+  .navbar-links {
+    gap: 10px; /* Daha küçük ekranlarda ikonlar arası boşluğu azalttık */
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-brand .navbar-logo {
+    height: 45px; /* En küçük ekranlarda logo boyutu */
+  }
+  .navbar-links {
+    gap: 8px; /* En küçük ekranlarda ikonlar arası boşluğu azalttık */
+  }
+  .nav-icon {
+    font-size: 1.2em; /* En küçük ekranlarda ikon boyutu */
+  }
+  .search-bar-container {
+    width: calc(100% - 20px);
+    left: 10px;
+    right: 10px;
+  }
+}

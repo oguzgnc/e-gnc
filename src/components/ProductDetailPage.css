@@ -1,0 +1,256 @@
+/* src/components/ProductDetailPage.css */
+
+.product-detail-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 150px); /* Navbar ve footer için boşluk bırakarak dikey ortalama */
+  padding: 40px 20px;
+  background-color: #f0f2f5;
+}
+
+.product-detail-card {
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  text-align: center;
+  max-width: 600px;
+  width: 100%;
+}
+
+.product-detail-image {
+  width: 100%;
+  max-height: 350px;
+  object-fit: cover;
+  border-radius: 15px;
+  margin-bottom: 25px;
+}
+
+.product-detail-card h2 {
+  font-size: 2.8em;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.product-detail-description {
+  font-size: 1.2em;
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.product-options {
+  margin-bottom: 30px;
+  text-align: center; /* Seçenek başlığını ortalar */
+}
+
+.product-options h3 {
+  font-size: 1.5em;
+  color: #4CAF50;
+  margin-bottom: 15px;
+  /* ! GÜNCELLENDİ ! */
+  font-family: 'Poppins', sans-serif;
+}
+
+.option-button {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px 20px;
+  margin: 0 8px 10px 8px;
+  cursor: pointer;
+  font-size: 1.1em;
+  color: #555;
+  transition: all 0.3s ease;
+}
+
+.option-button:hover {
+  background-color: #e0e0e0;
+}
+
+.option-button.selected {
+  background-color: #4CAF50;
+  color: white;
+  border-color: #4CAF50;
+  box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+}
+
+.quantity-control {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.quantity-control button {
+  background-color: #00796b; /* Ana Vurgu Rengi */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.5em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.quantity-control button:hover:not(:disabled) {
+  background-color: #005c4f; /* Ana Vurgu Renginin koyusu */
+}
+
+.quantity-control button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.quantity-control span {
+  font-size: 2em;
+  margin: 0 20px;
+  color: #333;
+  font-weight: bold;
+}
+
+.total-price-section {
+  display: flex;
+  justify-content: center;
+  align-items: baseline; /* Metinlerin alt çizgilerini hizalar */
+  gap: 15px; /* Elemanlar arası boşluk */
+  font-size: 1.5em;
+  color: #333;
+  font-weight: bold;
+  margin-bottom: 30px;
+  flex-wrap: wrap; /* Küçük ekranlarda alta geçiş sağlar */
+}
+
+.base-price, .quantity-display {
+  margin: 0;
+  color: #555;
+  font-size: 1em; /* Kendi font boyutunu koru */
+}
+
+.times-icon, .equals-sign {
+  font-size: 1.2em;
+  color: #d84315; /* İkincil Vurgu Rengi */
+  font-weight: bold;
+}
+
+.final-total-price {
+  font-size: 1.8em;
+  color: #00796b; /* Ana Vurgu Rengi */
+  font-weight: bold;
+  margin-left: 20px;
+  white-space: nowrap;
+}
+
+.product-detail-price {
+  font-size: 2.2em;
+  color: #d84315; /* İkincil Vurgu Rengi */
+  font-weight: bold;
+  margin-bottom: 25px;
+}
+
+.add-to-cart-button, .back-button {
+  background-color: #00796b; /* Ana Vurgu Rengi */
+  color: white;
+  padding: 15px 35px;
+  border: none;
+  border-radius: 30px;
+  font-size: 1.3em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 10px;
+  min-width: 200px;
+}
+
+.add-to-cart-button:hover, .back-button:hover {
+  background-color: #005c4f; /* Ana Vurgu Renginin koyusu */
+}
+
+.back-button {
+    background-color: #9E9E9E; /* Gri tonu, değiştirmedim */
+}
+
+.back-button:hover {
+    background-color: #757575; /* Gri tonu, değiştirmedim */
+}
+
+/* Yükleme mesajı */
+.loading-message {
+  text-align: center;
+  font-size: 1.5em;
+  color: #666;
+  margin-top: 50px;
+}
+
+/* Responsive Düzenlemeler */
+@media (max-width: 768px) {
+  .product-detail-card {
+    padding: 30px;
+  }
+  .product-detail-card h2 {
+    font-size: 2.2em;
+  }
+  .product-detail-description {
+  font-size: 1.2em;
+  color: #666;
+  margin-bottom: 30px;
+  /* ! GÜNCELLENDİ ! */
+  font-family: 'Open Sans', sans-serif;
+}
+  .total-price-section {
+    flex-direction: column; /* Küçük ekranlarda alt alta sırala */
+    align-items: center;
+    gap: 5px;
+    font-size: 1.2em;
+  }
+  .final-total-price {
+    font-size: 1.5em;
+    margin-left: 0; /* Ortalandığı için ekstra boşluğa gerek yok */
+  }
+  .add-to-cart-button, .back-button {
+    padding: 12px 25px;
+    font-size: 1.1em;
+    min-width: unset; /* Minimum genişliği kaldır */
+    width: 90%; /* Genişliği %90 yap */
+  }
+}
+
+@media (max-width: 480px) {
+  .product-detail-card {
+    padding: 20px;
+    border-radius: 15px;
+  }
+  .product-detail-image {
+    max-height: 250px;
+  }
+  .product-detail-card h2 {
+  font-size: 2.8em;
+  color: #333;
+  margin-bottom: 15px;
+  /* ! GÜNCELLENDİ ! */
+  font-family: 'Poppins', sans-serif;
+}
+  .option-button {
+    padding: 10px 15px;
+    font-size: 1em;
+    margin: 0 5px 8px 5px;
+  }
+  .quantity-control button {
+    width: 35px;
+    height: 35px;
+    font-size: 1.5em;
+  }
+  .quantity-control span {
+    font-size: 1.8em;
+    margin: 0 15px;
+  }
+  .total-price-section {
+    font-size: 1.1em;
+  }
+  .final-total-price {
+    font-size: 1.3em;
+  }
+}

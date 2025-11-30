@@ -1,0 +1,217 @@
+/* src/components/CategoryPage.css */
+
+.category-page {
+  padding: 40px 20px 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.category-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.category-header h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 3.5em;
+  color: #00796b;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.category-subtitle {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.2em;
+  color: #666;
+  font-weight: 300;
+}
+
+.category-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 25px;
+  margin-bottom: 60px;
+  justify-items: center;
+  justify-content: center;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.category-product-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  max-width: 280px;
+  width: 100%;
+}
+
+.category-product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 121, 107, 0.15);
+}
+
+.product-image-wrapper {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+.category-product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.category-product-card:hover .category-product-image {
+  transform: scale(1.1);
+}
+
+.product-info {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.product-info h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2em;
+  color: #333;
+  margin: 0 0 8px 0;
+  font-weight: 600;
+}
+
+.product-description {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.85em;
+  color: #666;
+  line-height: 1.4;
+  margin-bottom: 10px;
+  flex-grow: 1;
+}
+
+.product-volume {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.85em;
+  color: #999;
+  margin-bottom: 12px;
+}
+
+.product-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.product-price {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.4em;
+  color: #00796b;
+  font-weight: 700;
+  margin: 0;
+}
+
+.add-to-cart-btn {
+  background: linear-gradient(135deg, #00796b, #004d40);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.85em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 12px rgba(0, 121, 107, 0.2);
+}
+
+.add-to-cart-btn:hover {
+  background: linear-gradient(135deg, #004d40, #00251a);
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 121, 107, 0.3);
+}
+
+.add-to-cart-btn:active {
+  transform: scale(0.98);
+}
+
+/* Küçük İletişim Bölümü */
+.mini-contact-section {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 30px;
+  border-radius: 15px;
+  text-align: center;
+  margin-top: 60px;
+}
+
+.mini-contact-section h3 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.8em;
+  color: #00796b;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.mini-contact-info {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.mini-contact-info span {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1em;
+  color: #555;
+}
+
+.no-products-message {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.5em;
+  color: #666;
+  margin-top: 50px;
+  text-align: center;
+}
+
+/* Responsive Düzenlemeler */
+@media (max-width: 768px) {
+  .category-header h1 {
+    font-size: 2.5em;
+  }
+  
+  .category-products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 25px;
+  }
+  
+  .mini-contact-info {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .category-page {
+    padding: 20px 10px;
+  }
+  
+  .category-header h1 {
+    font-size: 2em;
+  }
+  
+  .category-products-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .mini-contact-section {
+    padding: 20px;
+  }
+}
