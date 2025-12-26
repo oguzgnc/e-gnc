@@ -3,6 +3,9 @@
 import React from 'react';
 import './BlogSection.css'; // Stil dosyası
 import { Link } from 'react-router-dom'; // Blog sayfasına yönlendirmek için
+import sutUrunleriImg from '../assets/süt-ürünleri.webp';
+import sarkuteriImg from '../assets/sarkuteri.webp';
+import gubreImg from '../assets/gubre.jpg';
 
 // Blog gönderileri için örnek veriler (ilk 3 tanesini alalım)
 // Bu veriler normalde merkezi bir yerden gelmeli (ProductDetailPage'deki gibi)
@@ -12,21 +15,21 @@ const blogPostsPreview = [
     title: 'Süt Ürünlerinin Faydaları',
     date: '15 Haziran 2024',
     excerpt: 'Süt ve süt ürünleri, kemik sağlığı için önemli kalsiyum ve D vitamini içerir.',
-    image: 'https://via.placeholder.com/300x200/b0e0e6/fff?text=S%C3%BCt' 
+    image: sutUrunleriImg
   },
   {
     id: 2,
     title: 'Şarküteri Dünyasına Yolculuk',
     date: '10 Haziran 2024',
     excerpt: 'Geleneksel şarküteri ürünleri, sofralarımıza lezzet katan özel yiyeceklerdir.',
-    image: 'https://via.placeholder.com/300x200/ffdab9/fff?text=%C5%9Eark%C3%BCteri' 
+    image: sarkuteriImg
   },
   {
     id: 3,
     title: 'Tarım ve Gübrelemenin Önemi',
     date: '5 Haziran 2024',
     excerpt: 'Sağlıklı topraklar ve verimli mahsuller için doğru gübreleme kritik öneme sahiptir.',
-    image: 'https://via.placeholder.com/300x200/c0d8e4/fff?text=Tarla' 
+    image: gubreImg
   },
 ];
 

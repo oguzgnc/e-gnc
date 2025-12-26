@@ -4,7 +4,11 @@ import ezinePeyniriImg from '../assets/ezine-peyniri.jpg';
 import sutImg from '../assets/sut.jpg';
 import sucukImg from '../assets/sucuk.jpg';
 import yogurtImg from '../assets/yogurt.jpg'; 
-import salamImg from '../assets/salam.jpg'; 
+import salamImg from '../assets/salam.jpg';
+import agrosolGranulous17Img from '../assets/agrosol-max-33-17.png';
+import agrosolMagnesiumSulfatImg from '../assets/agrosol-max-magnezyumsülfat.png';
+import agrosolMaxMixImg from '../assets/agrosol-max-mix.png';
+import dagKekigiImg from '../assets/dağ-kekiği.jpg';
 // Eğer kullandıysanız, diğer görselleri de import edin
 // import keciPeyniriImg from '../assets/keci-peyniri.jpg'; 
 // import kefirImg from '../assets/kefir.jpg'; 
@@ -75,39 +79,39 @@ export const products = [
   },
   // ! YENİ: Tarla Gübreleri ve Baharatlar için örnek ürünler ekliyoruz !
   {
-    id: 'organik-gubr',
-    name: 'Organik Bitki Gübresi',
-    description: 'Tüm bitkileriniz için doğal ve zenginleştirilmiş organik gübre.',
+    id: 'agrosol-granulous-17',
+    name: 'Agrosol Granulous 17',
+    description: 'Granit edilmiş içerik - Çim Çeşitleri Magnezyum Oksit (MgO), Suda Çözünür Kükürt Trioksit (SO3)',
     category: 'tarla-gubr',
     price: 80,
-    image: 'https://via.placeholder.com/300x300/a0d9b4/fff?text=Organik+G%C3%BCbre', // Örnek placeholder
+    image: agrosolGranulous17Img,
     options: [
-      { volume: '1 KG', price: 80 },
-      { volume: '5 KG', price: 350 },
+      { volume: '25 KG', price: 80 },
+      { volume: '50 KG', price: 150 },
     ],
   },
   {
-    id: 'domates-gubr',
-    name: 'Domates Özel Gübre',
-    description: 'Domates verimliliğini artıran özel formüllü gübre.',
+    id: 'agrosol-magnesium-sulfat',
+    name: 'Agrosol Magnezyum Sülfat',
+    description: 'Magnezyum Sülfat - Granit Edilen Form, Suda Çözünür Magnezyum Oksit (MgO), Suda Çözünür Kükürt Trioksit (SO3)',
     category: 'tarla-gubr',
     price: 110,
-    image: 'https://via.placeholder.com/300x300/c9e2b1/fff?text=Domates+G%C3%BCbre', // Örnek placeholder
+    image: agrosolMagnesiumSulfatImg,
     options: [
-      { volume: '1 KG', price: 110 },
-      { volume: '3 KG', price: 300 },
+      { volume: '25 KG', price: 110 },
+      { volume: '50 KG', price: 200 },
     ],
   },
   {
-    id: 'pul-biber',
-    name: 'Acı Pul Biber',
-    description: 'Yemeklerinize acılık ve renk katacak kaliteli pul biber.',
-    category: 'baharatlar',
-    price: 30,
-    image: 'https://via.placeholder.com/300x300/e07c24/fff?text=Pul+Biber', // Örnek placeholder
+    id: 'agrosol-max-mix',
+    name: 'Agrosol Max Mix Granülöz Çinko Katkılı',
+    description: 'Granit Edilmiş İçerik - Suda Çözünür Magnezyum Oksit (MgO), Suda Çözünür Kükürt Trioksit (SO3), Suda Çözünür Çinko (Zn)',
+    category: 'tarla-gubr',
+    price: 130,
+    image: agrosolMaxMixImg,
     options: [
-      { volume: '100 Gram', price: 30 },
-      { volume: '250 Gram', price: 70 },
+      { volume: '25 KG', price: 130 },
+      { volume: '50 KG', price: 240 },
     ],
   },
   {
@@ -116,7 +120,7 @@ export const products = [
     description: 'En doğal ve kokulu dağ kekikleri.',
     category: 'baharatlar',
     price: 25,
-    image: 'https://via.placeholder.com/300x300/98c1d9/fff?text=Kekik', // Örnek placeholder
+    image: dagKekigiImg,
     options: [
       { volume: '50 Gram', price: 25 },
       { volume: '150 Gram', price: 60 },
