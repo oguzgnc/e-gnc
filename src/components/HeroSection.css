@@ -208,30 +208,30 @@
 
 @media (max-width: 768px) {
   .hero-categories-only {
-    padding: 60px 15px;
+    padding: 40px 10px;
+    overflow: hidden;
   }
   
   .carousel-3d-container {
-    gap: 30px;
+    gap: 20px;
+    padding: 0 10px;
   }
   
   .carousel-3d {
-    width: 250px;
-    height: 320px;
+    width: 280px;
+    height: 350px;
   }
   
   .category-card-3d {
-    width: 220px;
-    height: 280px;
-    padding: 35px 25px;
+    width: 250px;
+    height: 320px;
+    padding: 30px 20px;
   }
   
-  .category-card-3d.card-right {
-    transform: translateX(180px) translateZ(-120px) rotateY(-30deg) scale(0.7);
-  }
-  
+  /* Yan kartları gizle */
+  .category-card-3d.card-right,
   .category-card-3d.card-left {
-    transform: translateX(-180px) translateZ(-120px) rotateY(30deg) scale(0.7);
+    display: none;
   }
   
   .hero-category-icon {
@@ -250,15 +250,23 @@
 }
 
 @media (max-width: 480px) {
+  .hero-categories-only {
+    padding: 30px 5px;
+  }
+  
+  .carousel-3d-container {
+    gap: 15px;
+  }
+  
   .carousel-3d {
-    width: 200px;
-    height: 280px;
+    width: 240px;
+    height: 300px;
   }
   
   .category-card-3d {
-    width: 180px;
-    height: 240px;
-    padding: 30px 20px;
+    width: 220px;
+    height: 280px;
+    padding: 25px 15px;
   }
   
   .category-card-3d.card-right,
@@ -278,6 +286,10 @@
     width: 40px;
     height: 40px;
     font-size: 1.2em;
+  }
+  
+  .carousel-dots {
+    margin-top: 25px;
   }
 }
 

@@ -1,6 +1,10 @@
 /* src/App.css */
 
 /* Temel Reset ve Font Ayarları */
+html {
+  overflow-x: hidden;
+}
+
 body {
   margin: 0; /* Tarayıcının varsayılan margin'ini sıfırlar */
   font-family: 'Open Sans', sans-serif; /* Genel metinler için Open Sans */
@@ -8,6 +12,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: #f9f9f9; /* Açık gri bir arka plan */
   color: #333; /* Koyu gri metin rengi */
+  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -111,7 +116,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Duyarlı Tasarım (Media Queries) */
 @media (max-width: 768px) {
   .App {
-    padding: 0 15px; /* Küçük ekranlarda yan boşluğu biraz azaltırız */
+    padding: 0 10px; /* Küçük ekranlarda yan boşluğu biraz azaltırız */
   }
   .hero-content h1 {
     font-size: 2.5em;
@@ -122,27 +127,34 @@ h1, h2, h3, h4, h5, h6 {
   .categories-section h2 {
     font-size: 2em;
   }
+  .categories-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
 }
 
 @media (max-width: 480px) {
   .App {
-    padding: 0 10px; /* Çok küçük ekranlarda daha da azaltırız */
+    padding: 0 5px; /* Çok küçük ekranlarda daha da azaltırız */
   }
   .hero-section {
     padding: 60px 15px;
   }
   .hero-content h1 {
-    font-size: 2em;
+    font-size: 1.8em;
   }
   .hero-content p {
-    font-size: 1em;
+    font-size: 0.95em;
   }
   .shop-now-button {
     padding: 10px 20px;
     font-size: 1em;
   }
   .category-card {
-    padding: 30px 15px;
-    font-size: 1.4em;
+    padding: 25px 15px;
+    font-size: 1.2em;
+  }
+  .categories-section h2 {
+    font-size: 1.6em;
   }
 }

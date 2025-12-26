@@ -142,6 +142,7 @@
     flex-direction: column;
     gap: 15px;
     text-align: center;
+    margin-bottom: 25px;
   }
 
   .contact-section-home h2 {
@@ -150,5 +151,32 @@
 
   .contact-info-grid {
     grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-section-home {
+    padding: 25px 10px;
+  }
+  
+  .contact-section-home h2 {
+    font-size: 1.3em;
+  }
+  
+  .info-item {
+    padding: 20px 15px;
+  }
+  
+  .info-item .info-icon {
+    font-size: 2em;
+  }
+  
+  .info-item h3 {
+    font-size: 1.05em;
+  }
+  
+  .info-item p {
+    font-size: 0.9em;
   }
 }
