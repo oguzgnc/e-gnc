@@ -5,6 +5,7 @@ import initDatabase from './config/initDatabase.js';
 import authRoutes from './routes/authRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import productRoutes from './routes/productRoutes.js';
+import setupRoutes from './routes/setupRoutes.js';
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/setup', setupRoutes);
 
 // Test route
 app.get('/', (req, res) => {
