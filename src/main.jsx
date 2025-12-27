@@ -11,6 +11,7 @@ import BlogPage from './components/BlogPage.jsx'; // BlogPage'i import etmeliyiz
 import ContactPage from './components/ContactPage.jsx'; // ContactPage'i import etmeliyiz
 import CategoryPage from './components/CategoryPage.jsx';
 import AboutUsPage from './components/AboutUsPage.jsx'; // AboutUsPage bileşenini import ediyoruz
+import AdminPanel from './components/AdminPanel.jsx'; // AdminPanel'i import ediyoruz
 
 import { CartProvider } from './context/CartContext.jsx'; 
 import { AuthProvider } from './context/AuthContext.jsx';
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
   {
     path: "/blog", // Blog sayfası
     element: <BlogPage />, // BlogPage bileşenini göster
+  },
+  {
+    path: "/admin", // Admin paneli
+    element: <AdminPanel />, // AdminPanel bileşenini göster
   },
 ]);
 

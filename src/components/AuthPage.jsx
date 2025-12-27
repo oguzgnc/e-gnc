@@ -7,43 +7,71 @@ import { useAuth } from '../context/AuthContext';
 
 function AuthPage() {
   const [isActive, setIsActive] = useState(false);
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, register } = useAuth();
 
   const handleRegisterClick = () => {
     setIsActive(true);
+    setError('');
   };
 
   const handleLoginClick = () => {
     setIsActive(false);
+    setError('');
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Formun varsayılan gönderimini engelle
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
 
-    if (isActive) {
-      // Kayıt olma mantığı (şimdilik basit bir konsol log)
-      if (password !== confirmPassword) {
-        alert('Şifreler eşleşmiyor!');
-        return;
+    try {
+      if (isActive) {
+        // Kayıt olma
+        if (!name.trim()) {
+          setError('İsim gereklidir');
+          setLoading(false);
+          return;
+        }
+        if (password !== confirmPassword) {
+          setError('Şifreler eşleşmiyor!');
+          setLoading(false);
+          return;
+        }
+        if (password.length < 6) {
+          setError('Şifre en az 6 karakter olmalıdır');
+          setLoading(false);
+          return;
+        }
+
+        const result = await register(name, email, password);
+        if (result.success) {
+          alert('Kayıt başarılı! Hoş geldiniz.');
+          navigate('/');
+        } else {
+          setError(result.message || 'Kayıt başarısız');
+        }
+      } else {
+        // Giriş yapma
+        const result = await login(email, password);
+        if (result.success) {
+          alert('Giriş başarılı!');
+          navigate('/');
+        } else {
+          setError(result.message || 'Giriş başarısız');
+        }
       }
-      console.log('Kayıt Olma Girişimi:', { email, password });
-      alert('Kayıt başarılı! (Gerçek uygulamada kayıt API\'si kullanılır)');
-      setIsActive(false); // Kayıt olduktan sonra giriş ekranına geri dön
-    } else {
-      // Giriş yapma mantığı
-      console.log('Giriş Yapma Girişimi:', { email, password });
-      login(email); // Giriş yap
-      alert('Giriş başarılı!');
-      navigate('/'); // Giriş sonrası ana sayfaya yönlendir
+    } catch (error) {
+      setError('Bir hata oluştu. Lütfen tekrar deneyin.');
+    } finally {
+      setLoading(false);
     }
-    // Formu temizle
-    setEmail('');
-    setPassword('');
-    setConfirmPassword('');
   };
 
   return (
@@ -53,11 +81,38 @@ function AuthPage() {
           <form onSubmit={handleSubmit}>
             <h1>Hesap Oluştur</h1>
             <span>E-posta adresinizle kayıt olun</span>
-            <input type="text" placeholder="İsim" />
-            <input type="email" placeholder="E-posta" value={email} onChange={(e) => setEmail(e.target.value)} />
-            <input type="password" placeholder="Şifre" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <input type="password" placeholder="Şifre Tekrar" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
-            <button>Kayıt Ol</button>
+            {error && <div className="error-message">{error}</div>}
+            <input 
+              type="text" 
+              placeholder="İsim" 
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+            <input 
+              type="email" 
+              placeholder="E-posta" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <input 
+              type="password" 
+              placeholder="Şifre (en az 6 karakter)" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <input 
+              type="password" 
+              placeholder="Şifre Tekrar" 
+              value={confirmPassword} 
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+            <button type="submit" disabled={loading}>
+              {loading ? 'Kaydediliyor...' : 'Kayıt Ol'}
+            </button>
           </form>
         </div>
 
@@ -65,10 +120,24 @@ function AuthPage() {
           <form onSubmit={handleSubmit}>
             <h1>Giriş Yap</h1>
             <span>E-posta ve şifrenizi girin</span>
-            <input type="email" placeholder="E-posta" value={email} onChange={(e) => setEmail(e.target.value)} />
-            <input type="password" placeholder="Şifre" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <a href="#">Şifrenizi mi unuttunuz?</a>
-            <button>Giriş Yap</button>
+            {error && <div className="error-message">{error}</div>}
+            <input 
+              type="email" 
+              placeholder="E-posta" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <input 
+              type="password" 
+              placeholder="Şifre" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button type="submit" disabled={loading}>
+              {loading ? 'Giriş yapılıyor...' : 'Giriş Yap'}
+            </button>
           </form>
         </div>
 

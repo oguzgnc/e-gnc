@@ -1,54 +1,89 @@
 // src/context/AuthContext.jsx
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { authAPI } from '../services/api';
 
 // 1. Auth Context'i oluşturuyoruz
 export const AuthContext = createContext();
 
 // 2. Auth Provider bileşenini oluşturuyoruz
 export const AuthProvider = ({ children }) => {
-  // Kullanıcı giriş durumunu tutmak için state
-  const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    // Sayfa yenilendiğinde giriş durumunu localStorage'dan yükle
-    const savedLoginStatus = localStorage.getItem('isLoggedIn');
-    return savedLoginStatus === 'true';
-  });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const [userEmail, setUserEmail] = useState(() => {
-    // Kullanıcı email'ini de saklayalım
-    return localStorage.getItem('userEmail') || '';
-  });
-
-  // Giriş durumu her değiştiğinde localStorage'a kaydet
+  // Sayfa yüklendiğinde token varsa kullanıcı bilgilerini getir
   useEffect(() => {
-    localStorage.setItem('isLoggedIn', isLoggedIn);
-    if (isLoggedIn) {
-      localStorage.setItem('userEmail', userEmail);
+    const token = localStorage.getItem('token');
+    if (token) {
+      fetchUserProfile();
     } else {
-      localStorage.removeItem('userEmail');
+      setLoading(false);
     }
-  }, [isLoggedIn, userEmail]);
+  }, []);
+
+  // Kullanıcı profilini getir
+  const fetchUserProfile = async () => {
+    try {
+      const response = await authAPI.getProfile();
+      if (response.success) {
+        setUser(response.user);
+        setIsLoggedIn(true);
+      }
+    } catch (error) {
+      console.error('Profil yüklenemedi:', error);
+      localStorage.removeItem('token');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Kayıt olma fonksiyonu
+  const register = async (name, email, password) => {
+    try {
+      const response = await authAPI.register({ name, email, password });
+      if (response.success) {
+        localStorage.setItem('token', response.token);
+        setUser(response.user);
+        setIsLoggedIn(true);
+        return { success: true };
+      }
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
+  };
 
   // Giriş yapma fonksiyonu
-  const login = (email) => {
-    setIsLoggedIn(true);
-    setUserEmail(email);
+  const login = async (email, password) => {
+    try {
+      const response = await authAPI.login({ email, password });
+      if (response.success) {
+        localStorage.setItem('token', response.token);
+        setUser(response.user);
+        setIsLoggedIn(true);
+        return { success: true };
+      }
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
   };
 
   // Çıkış yapma fonksiyonu
   const logout = () => {
-    setIsLoggedIn(false);
-    setUserEmail('');
-    // Sepeti temizle
+    localStorage.removeItem('token');
     localStorage.removeItem('cartItems');
-    // Sayfayı yenile ki sepet boş görünsün
-    window.location.reload();
+    setIsLoggedIn(false);
+    setUser(null);
+    window.location.href = '/';
   };
 
   return (
     <AuthContext.Provider value={{
       isLoggedIn,
-      userEmail,
+      user,
+      userEmail: user?.email || '',
+      loading,
+      register,
       login,
       logout
     }}>

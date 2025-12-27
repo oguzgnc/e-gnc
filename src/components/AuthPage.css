@@ -44,6 +44,17 @@
     display: block;
 }
 
+.error-message {
+    background-color: #fee;
+    color: #c33;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    font-size: 13px;
+    text-align: center;
+    border: 1px solid #fcc;
+}
+
 .container a{
     color: #333;
     font-size: 13px;
