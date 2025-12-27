@@ -59,6 +59,24 @@ const initDatabase = async () => {
     `);
 
     console.log('✅ Veritabanı tabloları başarıyla oluşturuldu');
+
+    // Varsayılan admin hesabı oluştur (eğer yoksa)
+    const adminCheck = await pool.query(
+      'SELECT * FROM users WHERE email = $1',
+      ['admin@gncsarkuteri.com']
+    );
+
+    if (adminCheck.rows.length === 0) {
+      const bcrypt = await import('bcryptjs');
+      const hashedPassword = await bcrypt.default.hash('admin123', 10);
+      
+      await pool.query(
+        'INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4)',
+        ['Admin', 'admin@gncsarkuteri.com', hashedPassword, 'admin']
+      );
+      
+      console.log('✅ Varsayılan admin hesabı oluşturuldu (admin@gncsarkuteri.com / admin123)');
+    }
   } catch (error) {
     console.error('❌ Veritabanı başlatma hatası:', error);
     throw error;
