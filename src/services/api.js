@@ -85,4 +85,31 @@ export const adminAPI = {
   },
 };
 
+// Product API
+export const productAPI = {
+  getAllProducts: async () => {
+    return apiCall('/products');
+  },
+
+  createProduct: async (productData) => {
+    return apiCall('/products', {
+      method: 'POST',
+      body: JSON.stringify(productData),
+    });
+  },
+
+  updateProduct: async (productId, productData) => {
+    return apiCall(`/products/${productId}`, {
+      method: 'PUT',
+      body: JSON.stringify(productData),
+    });
+  },
+
+  deleteProduct: async (productId) => {
+    return apiCall(`/products/${productId}`, {
+      method: 'DELETE',
+    });
+  },
+};
+
 export default apiCall;

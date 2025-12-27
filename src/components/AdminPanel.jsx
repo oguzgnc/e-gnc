@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { adminAPI } from '../services/api';
+import { adminAPI, productAPI } from '../services/api';
 import Navbar from './Navbar';
 import './AdminPanel.css';
 
@@ -14,7 +14,19 @@ function AdminPanel() {
   const [stats, setStats] = useState(null);
   const [users, setUsers] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showProductForm, setShowProductForm] = useState(false);
+  const [editingProduct, setEditingProduct] = useState(null);
+  const [productForm, setProductForm] = useState({
+    product_id: '',
+    name: '',
+    description: '',
+    category: '',
+    price: '',
+    image: '',
+    options: []
+  });
 
   useEffect(() => {
     // Admin kontrolü
@@ -30,15 +42,22 @@ function AdminPanel() {
   const loadDashboardData = async () => {
     setLoading(true);
     try {
-      const [statsRes, usersRes, ordersRes] = await Promise.all([
+      const [statsRes, usersRes, ordersRes, productsRes] = await Promise.all([
         adminAPI.getDashboardStats(),
         adminAPI.getAllUsers(),
-        adminAPI.getAllOrders()
+        adminAPI.getAllOrders(),
+        productAPI.getAllProducts()
       ]);
+
+      console.log('Stats Response:', statsRes);
+      console.log('Users Response:', usersRes);
+      console.log('Orders Response:', ordersRes);
+      console.log('Products Response:', productsRes);
 
       if (statsRes.success) setStats(statsRes.stats);
       if (usersRes.success) setUsers(usersRes.users);
       if (ordersRes.success) setOrders(ordersRes.orders);
+      if (productsRes.success) setProducts(productsRes.products);
     } catch (error) {
       console.error('Veri yükleme hatası:', error);
       alert('Veriler yüklenirken bir hata oluştu');
@@ -85,6 +104,79 @@ function AdminPanel() {
     }
   };
 
+  const handleProductSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    try {
+      const result = editingProduct 
+        ? await productAPI.updateProduct(editingProduct.id, productForm)
+        : await productAPI.createProduct(productForm);
+      
+      if (result.success) {
+        alert(editingProduct ? 'Ürün güncellendi' : 'Ürün eklendi');
+        setShowProductForm(false);
+        setEditingProduct(null);
+        setProductForm({
+          product_id: '',
+          name: '',
+          description: '',
+          category: '',
+          price: '',
+          image: '',
+          options: {}
+        });
+        loadDashboardData();
+      }
+    } catch (error) {
+      alert('İşlem başarısız: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEditProduct = (product) => {
+    setEditingProduct(product);
+    setProductForm({
+      product_id: product.product_id,
+      name: product.name,
+      description: product.description,
+      category: product.category,
+      price: product.price,
+      image: product.image,
+      options: product.options || {}
+    });
+    setShowProductForm(true);
+  };
+
+  const handleDeleteProduct = async (productId) => {
+    if (!confirm('Bu ürünü silmek istediğinize emin misiniz?')) return;
+
+    try {
+      const result = await productAPI.deleteProduct(productId);
+      if (result.success) {
+        alert('Ürün silindi');
+        loadDashboardData();
+      }
+    } catch (error) {
+      alert('Ürün silinemedi: ' + error.message);
+    }
+  };
+
+  const handleCancelProductForm = () => {
+    setShowProductForm(false);
+    setEditingProduct(null);
+    setProductForm({
+      product_id: '',
+      name: '',
+      description: '',
+      category: '',
+      price: '',
+      image: '',
+      options: {}
+    });
+  };
+
   if (loading) {
     return (
       <div>
@@ -123,6 +215,12 @@ function AdminPanel() {
             onClick={() => setActiveTab('orders')}
           >
             📦 Siparişler
+          </button>
+          <button 
+            className={activeTab === 'products' ? 'active' : ''}
+            onClick={() => setActiveTab('products')}
+          >
+            🏷️ Ürünler
           </button>
         </div>
 
@@ -241,6 +339,165 @@ function AdminPanel() {
                         </select>
                       </td>
                       <td>{new Date(order.created_at).toLocaleDateString('tr-TR')}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {activeTab === 'products' && (
+            <div className="admin-section">
+              <div className="section-header">
+                <h2>Ürün Yönetimi</h2>
+                <button 
+                  className="btn-primary"
+                  onClick={() => {
+                    setShowProductForm(true);
+                    setEditingProduct(null);
+                  }}
+                >
+                  + Yeni Ürün Ekle
+                </button>
+              </div>
+
+              {showProductForm && (
+                <div className="product-form-overlay">
+                  <div className="product-form-container">
+                    <div className="form-header">
+                      <h3>{editingProduct ? 'Ürün Düzenle' : 'Yeni Ürün Ekle'}</h3>
+                      <button className="close-btn" onClick={handleCancelProductForm}>×</button>
+                    </div>
+                    
+                    <form onSubmit={handleProductSubmit} className="product-form">
+                      <div className="form-group">
+                        <label>Ürün ID *</label>
+                        <input
+                          type="text"
+                          value={productForm.product_id}
+                          onChange={(e) => setProductForm({...productForm, product_id: e.target.value})}
+                          placeholder="Benzersiz ürün ID'si (örn: sucuk-fermente-500g)"
+                          required
+                          disabled={editingProduct}
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label>Ürün Adı *</label>
+                        <input
+                          type="text"
+                          value={productForm.name}
+                          onChange={(e) => setProductForm({...productForm, name: e.target.value})}
+                          placeholder="Ürün adı"
+                          required
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label>Kategori *</label>
+                        <select
+                          value={productForm.category}
+                          onChange={(e) => setProductForm({...productForm, category: e.target.value})}
+                          required
+                        >
+                          <option value="">Kategori Seçin</option>
+                          <option value="sucuk">Sucuk</option>
+                          <option value="sosis">Sosis</option>
+                          <option value="salam">Salam</option>
+                          <option value="pastirma">Pastırma</option>
+                          <option value="kavurma">Kavurma</option>
+                          <option value="jambon">Jambon</option>
+                        </select>
+                      </div>
+
+                      <div className="form-group">
+                        <label>Fiyat (₺) *</label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          value={productForm.price}
+                          onChange={(e) => setProductForm({...productForm, price: e.target.value})}
+                          placeholder="0.00"
+                          required
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label>Resim URL</label>
+                        <input
+                          type="text"
+                          value={productForm.image}
+                          onChange={(e) => setProductForm({...productForm, image: e.target.value})}
+                          placeholder="https://example.com/resim.jpg"
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label>Açıklama</label>
+                        <textarea
+                          value={productForm.description}
+                          onChange={(e) => setProductForm({...productForm, description: e.target.value})}
+                          placeholder="Ürün açıklaması"
+                          rows="4"
+                        />
+                      </div>
+
+                      <div className="form-actions">
+                        <button type="button" className="btn-secondary" onClick={handleCancelProductForm}>
+                          İptal
+                        </button>
+                        <button type="submit" className="btn-primary" disabled={loading}>
+                          {loading ? 'Kaydediliyor...' : (editingProduct ? 'Güncelle' : 'Ekle')}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
+
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>Ürün ID</th>
+                    <th>Resim</th>
+                    <th>Ürün Adı</th>
+                    <th>Kategori</th>
+                    <th>Fiyat</th>
+                    <th>Tarih</th>
+                    <th>İşlemler</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {products.map((product) => (
+                    <tr key={product.id}>
+                      <td>{product.product_id}</td>
+                      <td>
+                        {product.image ? (
+                          <img src={product.image} alt={product.name} className="product-thumbnail" />
+                        ) : (
+                          <div className="no-image">Resim Yok</div>
+                        )}
+                      </td>
+                      <td>{product.name}</td>
+                      <td>
+                        <span className="category-badge">{product.category}</span>
+                      </td>
+                      <td>{product.price} ₺</td>
+                      <td>{new Date(product.created_at).toLocaleDateString('tr-TR')}</td>
+                      <td className="actions">
+                        <button 
+                          className="btn-edit"
+                          onClick={() => handleEditProduct(product)}
+                        >
+                          ✏️ Düzenle
+                        </button>
+                        <button 
+                          className="btn-delete"
+                          onClick={() => handleDeleteProduct(product.id)}
+                        >
+                          🗑️ Sil
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>

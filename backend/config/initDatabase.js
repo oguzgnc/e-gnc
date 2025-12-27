@@ -42,6 +42,22 @@ const initDatabase = async () => {
       )
     `);
 
+    // Create products table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS products (
+        id SERIAL PRIMARY KEY,
+        product_id VARCHAR(100) UNIQUE NOT NULL,
+        name VARCHAR(255) NOT NULL,
+        description TEXT,
+        category VARCHAR(100) NOT NULL,
+        price DECIMAL(10, 2) NOT NULL,
+        image TEXT,
+        options JSONB DEFAULT '[]',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
     console.log('✅ Veritabanı tabloları başarıyla oluşturuldu');
   } catch (error) {
     console.error('❌ Veritabanı başlatma hatası:', error);
