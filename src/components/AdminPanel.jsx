@@ -4,7 +4,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { adminAPI, productAPI } from '../services/api';
-import Navbar from './Navbar';
+import AdminSidebar from './AdminSidebar';
+import AdminNavbar from './AdminNavbar';
+import AdminDashboard from './AdminDashboard';
+import AdminUsersPage from './AdminUsersPage';
+import AdminOrdersPage from './AdminOrdersPage';
+import AdminProductsPage from './AdminProductsPage';
+import AdminProductModal from './AdminProductModal';
 import './AdminPanel.css';
 
 function AdminPanel() {
@@ -18,15 +24,6 @@ function AdminPanel() {
   const [loading, setLoading] = useState(true);
   const [showProductForm, setShowProductForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
-  const [productForm, setProductForm] = useState({
-    product_id: '',
-    name: '',
-    description: '',
-    category: '',
-    price: '',
-    image: '',
-    options: []
-  });
 
   useEffect(() => {
     // Admin kontrolü
@@ -104,28 +101,18 @@ function AdminPanel() {
     }
   };
 
-  const handleProductSubmit = async (e) => {
-    e.preventDefault();
+  const handleProductSubmit = async (formData) => {
     setLoading(true);
     
     try {
       const result = editingProduct 
-        ? await productAPI.updateProduct(editingProduct.id, productForm)
-        : await productAPI.createProduct(productForm);
+        ? await productAPI.updateProduct(editingProduct.id, formData)
+        : await productAPI.createProduct(formData);
       
       if (result.success) {
         alert(editingProduct ? 'Ürün güncellendi' : 'Ürün eklendi');
         setShowProductForm(false);
         setEditingProduct(null);
-        setProductForm({
-          product_id: '',
-          name: '',
-          description: '',
-          category: '',
-          price: '',
-          image: '',
-          options: {}
-        });
         loadDashboardData();
       }
     } catch (error) {
@@ -137,15 +124,6 @@ function AdminPanel() {
 
   const handleEditProduct = (product) => {
     setEditingProduct(product);
-    setProductForm({
-      product_id: product.product_id,
-      name: product.name,
-      description: product.description,
-      category: product.category,
-      price: product.price,
-      image: product.image,
-      options: product.options || {}
-    });
     setShowProductForm(true);
   };
 
@@ -163,349 +141,76 @@ function AdminPanel() {
     }
   };
 
-  const handleCancelProductForm = () => {
+  const handleAddProduct = () => {
+    setEditingProduct(null);
+    setShowProductForm(true);
+  };
+
+  const handleCloseProductModal = () => {
     setShowProductForm(false);
     setEditingProduct(null);
-    setProductForm({
-      product_id: '',
-      name: '',
-      description: '',
-      category: '',
-      price: '',
-      image: '',
-      options: {}
-    });
   };
 
   if (loading) {
     return (
-      <div>
-        <Navbar />
-        <div className="admin-panel">
-          <div className="loading">Yükleniyor...</div>
+      <div className="admin-layout">
+        <AdminSidebar activeTab={activeTab} onTabChange={setActiveTab} />
+        <div className="admin-main">
+          <AdminNavbar />
+          <div className="admin-content">
+            <div className="loading">Yükleniyor...</div>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div>
-      <Navbar />
-      <div className="admin-panel">
-        <div className="admin-header">
-          <h1>🛡️ Admin Paneli</h1>
-          <p>Hoş geldiniz, {user?.name}</p>
-        </div>
-
-        <div className="admin-tabs">
-          <button 
-            className={activeTab === 'dashboard' ? 'active' : ''}
-            onClick={() => setActiveTab('dashboard')}
-          >
-            📊 Dashboard
-          </button>
-          <button 
-            className={activeTab === 'users' ? 'active' : ''}
-            onClick={() => setActiveTab('users')}
-          >
-            👥 Kullanıcılar
-          </button>
-          <button 
-            className={activeTab === 'orders' ? 'active' : ''}
-            onClick={() => setActiveTab('orders')}
-          >
-            📦 Siparişler
-          </button>
-          <button 
-            className={activeTab === 'products' ? 'active' : ''}
-            onClick={() => setActiveTab('products')}
-          >
-            🏷️ Ürünler
-          </button>
-        </div>
-
+    <div className="admin-layout">
+      <AdminSidebar activeTab={activeTab} onTabChange={setActiveTab} />
+      
+      <div className="admin-main">
+        <AdminNavbar activeTab={activeTab} />
+        
         <div className="admin-content">
-          {activeTab === 'dashboard' && stats && (
-            <div className="dashboard-stats">
-              <div className="stat-card">
-                <div className="stat-icon">👥</div>
-                <div className="stat-info">
-                  <h3>{stats.totalUsers}</h3>
-                  <p>Toplam Kullanıcı</p>
-                </div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-icon">📦</div>
-                <div className="stat-info">
-                  <h3>{stats.totalOrders}</h3>
-                  <p>Toplam Sipariş</p>
-                </div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-icon">💰</div>
-                <div className="stat-info">
-                  <h3>{stats.totalRevenue.toFixed(2)} ₺</h3>
-                  <p>Toplam Gelir</p>
-                </div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-icon">⏳</div>
-                <div className="stat-info">
-                  <h3>{stats.pendingOrders}</h3>
-                  <p>Bekleyen Sipariş</p>
-                </div>
-              </div>
-            </div>
-          )}
-
+          {activeTab === 'dashboard' && <AdminDashboard stats={stats} />}
+          
           {activeTab === 'users' && (
-            <div className="users-table">
-              <h2>Kullanıcı Yönetimi</h2>
-              <table>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>İsim</th>
-                    <th>Email</th>
-                    <th>Rol</th>
-                    <th>Kayıt Tarihi</th>
-                    <th>İşlemler</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {users.map(u => (
-                    <tr key={u.id}>
-                      <td>{u.id}</td>
-                      <td>{u.name}</td>
-                      <td>{u.email}</td>
-                      <td>
-                        <select 
-                          value={u.role} 
-                          onChange={(e) => handleRoleChange(u.id, e.target.value)}
-                          disabled={u.id === user?.id}
-                        >
-                          <option value="user">User</option>
-                          <option value="admin">Admin</option>
-                        </select>
-                      </td>
-                      <td>{new Date(u.created_at).toLocaleDateString('tr-TR')}</td>
-                      <td>
-                        <button 
-                          className="delete-btn"
-                          onClick={() => handleDeleteUser(u.id)}
-                          disabled={u.id === user?.id}
-                        >
-                          🗑️ Sil
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <AdminUsersPage
+              users={users}
+              onRoleChange={handleRoleChange}
+              onDeleteUser={handleDeleteUser}
+            />
           )}
-
+          
           {activeTab === 'orders' && (
-            <div className="orders-table">
-              <h2>Sipariş Yönetimi</h2>
-              <table>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Kullanıcı</th>
-                    <th>Email</th>
-                    <th>Tutar</th>
-                    <th>Durum</th>
-                    <th>Tarih</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orders.map(order => (
-                    <tr key={order.id}>
-                      <td>{order.id}</td>
-                      <td>{order.user_name}</td>
-                      <td>{order.user_email}</td>
-                      <td>{parseFloat(order.total_price).toFixed(2)} ₺</td>
-                      <td>
-                        <select 
-                          value={order.status} 
-                          onChange={(e) => handleOrderStatusChange(order.id, e.target.value)}
-                        >
-                          <option value="pending">Beklemede</option>
-                          <option value="processing">İşleniyor</option>
-                          <option value="shipped">Kargoya Verildi</option>
-                          <option value="delivered">Teslim Edildi</option>
-                          <option value="cancelled">İptal Edildi</option>
-                        </select>
-                      </td>
-                      <td>{new Date(order.created_at).toLocaleDateString('tr-TR')}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <AdminOrdersPage
+              orders={orders}
+              onStatusChange={handleOrderStatusChange}
+            />
           )}
-
+          
           {activeTab === 'products' && (
-            <div className="admin-section">
-              <div className="section-header">
-                <h2>Ürün Yönetimi</h2>
-                <button 
-                  className="btn-primary"
-                  onClick={() => {
-                    setShowProductForm(true);
-                    setEditingProduct(null);
-                  }}
-                >
-                  + Yeni Ürün Ekle
-                </button>
-              </div>
-
-              {showProductForm && (
-                <div className="product-form-overlay">
-                  <div className="product-form-container">
-                    <div className="form-header">
-                      <h3>{editingProduct ? 'Ürün Düzenle' : 'Yeni Ürün Ekle'}</h3>
-                      <button className="close-btn" onClick={handleCancelProductForm}>×</button>
-                    </div>
-                    
-                    <form onSubmit={handleProductSubmit} className="product-form">
-                      <div className="form-group">
-                        <label>Ürün ID *</label>
-                        <input
-                          type="text"
-                          value={productForm.product_id}
-                          onChange={(e) => setProductForm({...productForm, product_id: e.target.value})}
-                          placeholder="Benzersiz ürün ID'si (örn: sucuk-fermente-500g)"
-                          required
-                          disabled={editingProduct}
-                        />
-                      </div>
-
-                      <div className="form-group">
-                        <label>Ürün Adı *</label>
-                        <input
-                          type="text"
-                          value={productForm.name}
-                          onChange={(e) => setProductForm({...productForm, name: e.target.value})}
-                          placeholder="Ürün adı"
-                          required
-                        />
-                      </div>
-
-                      <div className="form-group">
-                        <label>Kategori *</label>
-                        <select
-                          value={productForm.category}
-                          onChange={(e) => setProductForm({...productForm, category: e.target.value})}
-                          required
-                        >
-                          <option value="">Kategori Seçin</option>
-                          <option value="sucuk">Sucuk</option>
-                          <option value="sosis">Sosis</option>
-                          <option value="salam">Salam</option>
-                          <option value="pastirma">Pastırma</option>
-                          <option value="kavurma">Kavurma</option>
-                          <option value="jambon">Jambon</option>
-                        </select>
-                      </div>
-
-                      <div className="form-group">
-                        <label>Fiyat (₺) *</label>
-                        <input
-                          type="number"
-                          step="0.01"
-                          value={productForm.price}
-                          onChange={(e) => setProductForm({...productForm, price: e.target.value})}
-                          placeholder="0.00"
-                          required
-                        />
-                      </div>
-
-                      <div className="form-group">
-                        <label>Resim URL</label>
-                        <input
-                          type="text"
-                          value={productForm.image}
-                          onChange={(e) => setProductForm({...productForm, image: e.target.value})}
-                          placeholder="https://example.com/resim.jpg"
-                        />
-                      </div>
-
-                      <div className="form-group">
-                        <label>Açıklama</label>
-                        <textarea
-                          value={productForm.description}
-                          onChange={(e) => setProductForm({...productForm, description: e.target.value})}
-                          placeholder="Ürün açıklaması"
-                          rows="4"
-                        />
-                      </div>
-
-                      <div className="form-actions">
-                        <button type="button" className="btn-secondary" onClick={handleCancelProductForm}>
-                          İptal
-                        </button>
-                        <button type="submit" className="btn-primary" disabled={loading}>
-                          {loading ? 'Kaydediliyor...' : (editingProduct ? 'Güncelle' : 'Ekle')}
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              )}
-
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Ürün ID</th>
-                    <th>Resim</th>
-                    <th>Ürün Adı</th>
-                    <th>Kategori</th>
-                    <th>Fiyat</th>
-                    <th>Tarih</th>
-                    <th>İşlemler</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {products.map((product) => (
-                    <tr key={product.id}>
-                      <td>{product.product_id}</td>
-                      <td>
-                        {product.image ? (
-                          <img src={product.image} alt={product.name} className="product-thumbnail" />
-                        ) : (
-                          <div className="no-image">Resim Yok</div>
-                        )}
-                      </td>
-                      <td>{product.name}</td>
-                      <td>
-                        <span className="category-badge">{product.category}</span>
-                      </td>
-                      <td>{product.price} ₺</td>
-                      <td>{new Date(product.created_at).toLocaleDateString('tr-TR')}</td>
-                      <td className="actions">
-                        <button 
-                          className="btn-edit"
-                          onClick={() => handleEditProduct(product)}
-                        >
-                          ✏️ Düzenle
-                        </button>
-                        <button 
-                          className="btn-delete"
-                          onClick={() => handleDeleteProduct(product.id)}
-                        >
-                          🗑️ Sil
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <AdminProductsPage
+              products={products}
+              onAddProduct={handleAddProduct}
+              onEditProduct={handleEditProduct}
+              onDeleteProduct={handleDeleteProduct}
+            />
           )}
         </div>
+
+        <footer className="admin-footer">
+          <p>© 2024 GNC Şarküteri - Tüm hakları saklıdır</p>
+        </footer>
       </div>
+
+      <AdminProductModal
+        isOpen={showProductForm}
+        onClose={handleCloseProductModal}
+        onSave={handleProductSubmit}
+        product={editingProduct}
+      />
     </div>
   );
 }

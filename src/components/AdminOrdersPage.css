@@ -1,0 +1,170 @@
+/* src/components/AdminOrdersPage.css */
+
+.admin-orders-page {
+  padding: 0;
+}
+
+.page-header {
+  margin-bottom: 32px;
+}
+
+.page-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #212121;
+  margin: 0 0 8px;
+}
+
+.page-subtitle {
+  font-size: 16px;
+  color: #757575;
+  margin: 0;
+}
+
+/* Table Container */
+.table-container {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table thead {
+  background: #F5F5F5;
+}
+
+.admin-table th {
+  padding: 16px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: #212121;
+  border-bottom: 2px solid #e5e5e5;
+}
+
+.admin-table tbody tr {
+  border-bottom: 1px solid #e5e5e5;
+  transition: all 0.2s ease;
+}
+
+.admin-table tbody tr:hover {
+  background: #F9F9F9;
+}
+
+.admin-table td {
+  padding: 16px;
+  font-size: 14px;
+  color: #212121;
+}
+
+.td-id {
+  font-weight: 600;
+  color: #757575;
+}
+
+.td-name {
+  font-weight: 500;
+}
+
+.td-email {
+  color: #757575;
+}
+
+.td-amount {
+  font-weight: 600;
+  color: #FF6F00;
+}
+
+.td-status {
+  font-weight: 500;
+}
+
+.td-date {
+  color: #757575;
+}
+
+/* Status Select */
+.status-select {
+  padding: 6px 12px;
+  border: 2px solid;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  appearance: none;
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 12px;
+  padding-right: 28px;
+}
+
+.status-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Status Colors */
+.badge-pending {
+  background: #FFF8E1;
+  color: #F57F17;
+  border-color: #FBC02D;
+}
+
+.badge-processing {
+  background: #E3F2FD;
+  color: #1565C0;
+  border-color: #42A5F5;
+}
+
+.badge-shipped {
+  background: #FFF3E0;
+  color: #E65100;
+  border-color: #FF9800;
+}
+
+.badge-delivered {
+  background: #E8F5E9;
+  color: #2E7D32;
+  border-color: #66BB6A;
+}
+
+.badge-cancelled {
+  background: #FFEBEE;
+  color: #C62828;
+  border-color: #EF5350;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #757575;
+  font-size: 16px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .table-container {
+    padding: 16px;
+  }
+
+  .admin-table {
+    font-size: 12px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 12px 8px;
+  }
+
+  .page-title {
+    font-size: 24px;
+  }
+}
