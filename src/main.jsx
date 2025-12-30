@@ -12,6 +12,7 @@ import ContactPage from './components/ContactPage.jsx'; // ContactPage'i import 
 import CategoryPage from './components/CategoryPage.jsx';
 import AboutUsPage from './components/AboutUsPage.jsx'; // AboutUsPage bileşenini import ediyoruz
 import AdminPanel from './components/AdminPanel.jsx'; // AdminPanel'i import ediyoruz
+import MyOrdersPage from './components/MyOrdersPage.jsx'; // MyOrdersPage'i import ediyoruz
 
 import { CartProvider } from './context/CartContext.jsx'; 
 import { AuthProvider } from './context/AuthContext.jsx';
@@ -63,6 +64,14 @@ const router = createBrowserRouter([
   {
     path: "/admin", // Admin paneli
     element: <AdminPanel />, // AdminPanel bileşenini göster
+  },
+  {
+    path: "/my-orders", // Siparişlerim sayfası
+    element: <MyOrdersPage />, // MyOrdersPage bileşenini göster
+  },
+  {
+    path: "/auth", // Alternatif giriş yolu
+    element: <AuthPage />,
   },
 ]);
 

@@ -85,40 +85,38 @@ function AdminDashboard({ stats }) {
   };
 
   // Sipariş durumu - gerçek verilerle
-  const completedOrders = Math.round((totalOrders - pendingOrders) * 0.6);
-  const processingOrders = Math.round((totalOrders - pendingOrders) * 0.3);
-  const cancelledOrders = totalOrders - completedOrders - processingOrders - pendingOrders;
-  
+  const ordersByStatus = stats?.ordersByStatus || {};
   const orderStatusData = {
-    labels: ['Tamamlandı', 'İşlemde', 'Beklemede', 'İptal'],
+    labels: ['Tamamlandı', 'İşlemde', 'Kargoda', 'Beklemede', 'İptal'],
     datasets: [
       {
         data: [
-          completedOrders > 0 ? completedOrders : 1,
-          processingOrders > 0 ? processingOrders : 1,
-          pendingOrders > 0 ? pendingOrders : 1,
-          cancelledOrders > 0 ? cancelledOrders : 1
+          ordersByStatus.delivered || 0,
+          ordersByStatus.processing || 0,
+          ordersByStatus.shipped || 0,
+          ordersByStatus.pending || 0,
+          ordersByStatus.cancelled || 0
         ],
-        backgroundColor: ['#4CAF50', '#2196F3', '#FFC107', '#F44336'],
+        backgroundColor: ['#4CAF50', '#2196F3', '#FF9800', '#FFC107', '#F44336'],
         borderWidth: 0,
       },
     ],
   };
 
-  // Kategori satışları - eşit dağılım (gerçek veri backend'den gelebilir)
-  const avgSales = Math.max(Math.round(totalOrders / 6), 5);
+  // Kategori satışları - gerçek verilerden
+  const categorySales = stats?.categorySales || {};
   const categorySalesData = {
     labels: ['Sucuk', 'Sosis', 'Salam', 'Pastırma', 'Kavurma', 'Jambon'],
     datasets: [
       {
         label: 'Satış Adedi',
         data: [
-          Math.round(avgSales * 1.2),
-          Math.round(avgSales * 0.9),
-          Math.round(avgSales * 1.5),
-          Math.round(avgSales * 1.1),
-          Math.round(avgSales * 0.8),
-          Math.round(avgSales * 1.0)
+          categorySales.sucuk || 0,
+          categorySales.sosis || 0,
+          categorySales.salam || 0,
+          categorySales.pastırma || categorySales.pastirma || 0,
+          categorySales.kavurma || 0,
+          categorySales.jambon || 0
         ],
         backgroundColor: '#00796b',
         borderRadius: 6,

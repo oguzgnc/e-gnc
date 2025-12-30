@@ -89,7 +89,7 @@
 }
 
 .nav-icon {
-  font-size: 1.4em; /* İkon boyutunu küçülttük */
+  font-size: 1.2em; /* İkon boyutunu biraz daha küçülttük */
   margin-bottom: 2px; /* İkon ile yazı arası boşluğu azalttık */
   color: #666; /* Daha koyu gri ikon rengi */
   transition: color 0.3s ease;

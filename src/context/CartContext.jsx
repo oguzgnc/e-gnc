@@ -25,11 +25,6 @@ export const CartProvider = ({ children }) => {
 
   // Sepete ürün ekleme fonksiyonu
   const addToCart = (product, selectedOption, quantity) => {
-    if (!isLoggedIn) {
-      alert('⚠️ Sepete ürün eklemek için giriş yapmanız gerekmektedir!');
-      return false;
-    }
-    
     setCartItems(prevItems => {
       // Sepette aynı ürün ve aynı seçenek var mı kontrol et
       const existingItemIndex = prevItems.findIndex(
@@ -80,6 +75,11 @@ export const CartProvider = ({ children }) => {
     return cartItems.reduce((total, item) => total + item.quantity, 0);
   };
 
+  // Sepeti tamamen temizleme fonksiyonu
+  const clearCart = () => {
+    setCartItems([]);
+  };
+
 
   return (
     <CartContext.Provider value={{
@@ -88,7 +88,8 @@ export const CartProvider = ({ children }) => {
       removeFromCart,
       updateQuantity,
       getCartTotal,
-      getCartItemCount
+      getCartItemCount,
+      clearCart
     }}>
       {children}
     </CartContext.Provider>

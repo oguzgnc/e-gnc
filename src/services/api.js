@@ -112,4 +112,22 @@ export const productAPI = {
   },
 };
 
+// Order API
+export const orderAPI = {
+  createOrder: async (orderData) => {
+    return apiCall('/orders/create', {
+      method: 'POST',
+      body: JSON.stringify(orderData),
+    });
+  },
+
+  getUserOrders: async () => {
+    return apiCall('/orders/my-orders');
+  },
+
+  getOrderDetails: async (orderId) => {
+    return apiCall(`/orders/${orderId}`);
+  },
+};
+
 export default apiCall;

@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import './Navbar.css'; 
-import { FaUser, FaShoppingCart, FaBars, FaSearch, FaSignOutAlt, FaUserShield } from 'react-icons/fa'; 
+import { FaUser, FaShoppingCart, FaBars, FaSearch, FaSignOutAlt, FaUserShield, FaClipboardList } from 'react-icons/fa'; 
 // ! GÜNCELLENDİ: Link yerine NavLink import ediyoruz !
 import { NavLink, useNavigate } from 'react-router-dom'; 
 import { useCart } from '../context/CartContext'; 
@@ -124,6 +124,12 @@ function Navbar() {
           <NavLink to="/admin" className="nav-icon-link">
             <FaUserShield className="nav-icon" />
             <span>Admin</span>
+          </NavLink>
+        )}
+        {isLoggedIn && (
+          <NavLink to="/my-orders" className="nav-icon-link">
+            <FaClipboardList className="nav-icon" />
+            <span>Siparişlerim</span>
           </NavLink>
         )}
         {isLoggedIn ? (

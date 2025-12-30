@@ -20,7 +20,9 @@ const initDatabase = async () => {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS orders (
         id SERIAL PRIMARY KEY,
-        user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+        user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+        customer_name VARCHAR(255),
+        customer_email VARCHAR(255),
         total_price DECIMAL(10, 2) NOT NULL,
         status VARCHAR(50) DEFAULT 'pending',
         shipping_address TEXT,

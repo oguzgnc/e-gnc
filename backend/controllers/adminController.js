@@ -96,14 +96,25 @@ export const getAllOrders = async (req, res) => {
       SELECT 
         o.id, 
         o.user_id, 
-        u.name as user_name, 
-        u.email as user_email,
+        COALESCE(u.name, o.customer_name, 'Misafir') as user_name,
+        COALESCE(u.email, o.customer_email, 'Belirtilmemiş') as user_email,
         o.total_price, 
         o.status, 
         o.shipping_address,
-        o.created_at
+        o.created_at,
+        json_agg(
+          json_build_object(
+            'id', oi.id,
+            'product_name', oi.product_name,
+            'quantity', oi.quantity,
+            'price', oi.price,
+            'volume', oi.volume
+          )
+        ) as items
       FROM orders o
-      JOIN users u ON o.user_id = u.id
+      LEFT JOIN users u ON o.user_id = u.id
+      LEFT JOIN order_items oi ON o.id = oi.order_id
+      GROUP BY o.id, u.name, u.email, o.customer_name, o.customer_email
       ORDER BY o.created_at DESC
     `);
 
@@ -174,6 +185,43 @@ export const getDashboardStats = async (req, res) => {
     
     // Bekleyen siparişler
     const pendingOrders = await pool.query('SELECT COUNT(*) FROM orders WHERE status = $1', ['pending']);
+    
+    // Sipariş durumlarına göre sayılar
+    const ordersByStatus = await pool.query(`
+      SELECT 
+        status,
+        COUNT(*) as count
+      FROM orders
+      GROUP BY status
+    `);
+    
+    // Kategorilere göre satış sayıları (order_items'dan)
+    const categorySales = await pool.query(`
+      SELECT 
+        LOWER(SPLIT_PART(product_name, ' ', 1)) as category,
+        SUM(quantity) as total_quantity
+      FROM order_items
+      GROUP BY LOWER(SPLIT_PART(product_name, ' ', 1))
+    `);
+
+    // Sipariş durumlarını objeye çevir
+    const statusCounts = {
+      pending: 0,
+      processing: 0,
+      shipped: 0,
+      delivered: 0,
+      cancelled: 0
+    };
+    
+    ordersByStatus.rows.forEach(row => {
+      statusCounts[row.status] = parseInt(row.count);
+    });
+
+    // Kategori satışlarını objeye çevir
+    const categorySalesObj = {};
+    categorySales.rows.forEach(row => {
+      categorySalesObj[row.category] = parseInt(row.total_quantity);
+    });
 
     res.json({
       success: true,
@@ -181,7 +229,9 @@ export const getDashboardStats = async (req, res) => {
         totalUsers: parseInt(usersCount.rows[0].count),
         totalOrders: parseInt(ordersCount.rows[0].count),
         totalRevenue: parseFloat(totalRevenue.rows[0].sum || 0),
-        pendingOrders: parseInt(pendingOrders.rows[0].count)
+        pendingOrders: parseInt(pendingOrders.rows[0].count),
+        ordersByStatus: statusCounts,
+        categorySales: categorySalesObj
       }
     });
   } catch (error) {
