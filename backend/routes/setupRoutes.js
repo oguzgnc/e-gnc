@@ -119,10 +119,11 @@ router.post('/seed-products', async (req, res) => {
 
     for (const product of products) {
       try {
-        await pool.query(
+        const result = await pool.query(
           `INSERT INTO products (product_id, name, description, category, price, image, options, in_stock) 
            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-           ON CONFLICT (product_id) DO NOTHING`,
+           ON CONFLICT (product_id) DO NOTHING
+           RETURNING product_id`,
           [
             product.product_id,
             product.name,
@@ -134,7 +135,11 @@ router.post('/seed-products', async (req, res) => {
             true
           ]
         );
-        addedCount++;
+        if (result.rows.length > 0) {
+          addedCount++;
+        } else {
+          skippedCount++;
+        }
       } catch (err) {
         console.error(`Ürün eklenemedi: ${product.name}`, err);
         skippedCount++;
@@ -147,7 +152,7 @@ router.post('/seed-products', async (req, res) => {
       message: 'Ürünler eklendi',
       added: addedCount,
       skipped: skippedCount,
-      total: countResult.rows[0].count
+      total: parseInt(countResult.rows[0].count)
     });
   } catch (error) {
     console.error('Ürün ekleme hatası:', error);
