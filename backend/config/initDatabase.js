@@ -76,6 +76,12 @@ const initDatabase = async () => {
       )
     `);
 
+    // Mevcut tablolara eksik kolonları ekle (migration)
+    await pool.query(`
+      ALTER TABLE products 
+      ADD COLUMN IF NOT EXISTS in_stock BOOLEAN DEFAULT true
+    `);
+
     console.log('✅ Veritabanı tabloları başarıyla oluşturuldu');
 
     // Varsayılan admin hesabı oluştur (eğer yoksa)
