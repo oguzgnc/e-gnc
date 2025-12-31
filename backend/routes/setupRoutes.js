@@ -30,6 +30,21 @@ router.post('/make-first-admin', async (req, res) => {
 // Ürünleri database'e ekle (tek seferlik setup)
 router.post('/seed-products', async (req, res) => {
   try {
+    // Önce tablo var mı kontrol et
+    const tableCheck = await pool.query(`
+      SELECT EXISTS (
+        SELECT FROM information_schema.tables 
+        WHERE table_name = 'products'
+      );
+    `);
+    
+    if (!tableCheck.rows[0].exists) {
+      return res.status(400).json({ 
+        message: 'Products tablosu bulunamadı. Backend loglarını kontrol edin.',
+        exists: false
+      });
+    }
+
     const products = [
       {
         product_id: 'sut',
