@@ -171,4 +171,25 @@ router.post('/seed-products', async (req, res) => {
   }
 });
 
+// Image path'lerini güncelle
+router.post('/fix-image-paths', async (req, res) => {
+  try {
+    await pool.query(`
+      UPDATE products 
+      SET image = REPLACE(image, '/src/assets/', '/images/')
+      WHERE image LIKE '/src/assets/%'
+    `);
+    
+    const result = await pool.query('SELECT product_id, name, image FROM products');
+    
+    res.json({ 
+      message: 'Image path\'leri güncellendi',
+      products: result.rows
+    });
+  } catch (error) {
+    console.error('Image path güncelleme hatası:', error);
+    res.status(500).json({ message: 'Sunucu hatası', error: error.message });
+  }
+});
+
 export default router;
