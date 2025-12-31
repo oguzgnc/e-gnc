@@ -141,6 +141,18 @@ function AdminPanel() {
     }
   };
 
+  const handleToggleStock = async (productId, inStock) => {
+    try {
+      const result = await productAPI.toggleStock(productId, inStock);
+      if (result.success) {
+        alert(inStock ? 'Ürün stoğa alındı' : 'Ürün stoktan çıkarıldı');
+        loadDashboardData();
+      }
+    } catch (error) {
+      alert('Stok durumu güncellenemedi: ' + error.message);
+    }
+  };
+
   const handleAddProduct = () => {
     setEditingProduct(null);
     setShowProductForm(true);
@@ -196,6 +208,7 @@ function AdminPanel() {
               onAddProduct={handleAddProduct}
               onEditProduct={handleEditProduct}
               onDeleteProduct={handleDeleteProduct}
+              onToggleStock={handleToggleStock}
             />
           )}
         </div>

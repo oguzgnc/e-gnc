@@ -55,6 +55,7 @@ const initDatabase = async () => {
         price DECIMAL(10, 2) NOT NULL,
         image TEXT,
         options JSONB DEFAULT '[]',
+        in_stock BOOLEAN DEFAULT true,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )

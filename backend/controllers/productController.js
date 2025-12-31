@@ -141,3 +141,38 @@ export const getProductsByCategory = async (req, res) => {
     });
   }
 };
+
+// Ürün stok durumunu güncelle
+export const toggleProductStock = async (req, res) => {
+  const { id } = req.params;
+  const { in_stock } = req.body;
+
+  try {
+    const result = await pool.query(
+      `UPDATE products 
+       SET in_stock = $1, updated_at = CURRENT_TIMESTAMP
+       WHERE id = $2
+       RETURNING *`,
+      [in_stock, id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Ürün bulunamadı'
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Stok durumu güncellendi',
+      product: result.rows[0]
+    });
+  } catch (error) {
+    console.error('Stok güncelleme hatası:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Stok durumu güncellenirken hata oluştu'
+    });
+  }
+};

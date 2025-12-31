@@ -116,12 +116,10 @@ function AdminProductModal({ isOpen, onClose, onSave, product }) {
                 required
               >
                 <option value="">Kategori Seçin</option>
-                <option value="sucuk">Sucuk</option>
-                <option value="sosis">Sosis</option>
-                <option value="salam">Salam</option>
-                <option value="pastirma">Pastırma</option>
-                <option value="kavurma">Kavurma</option>
-                <option value="jambon">Jambon</option>
+                <option value="et-urunleri">Et Ürünleri</option>
+                <option value="sut-urunleri">Süt Ürünleri</option>
+                <option value="baharatlar">Baharatlar</option>
+                <option value="tarla-gubreleri">Tarla Gübreleri</option>
               </select>
             </div>
 

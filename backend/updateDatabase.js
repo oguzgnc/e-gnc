@@ -4,6 +4,14 @@ async function updateDatabase() {
   try {
     console.log('🔄 Veritabanı güncelleniyor...');
     
+    // in_stock kolonunu ekle
+    await pool.query(`
+      ALTER TABLE products 
+      ADD COLUMN IF NOT EXISTS in_stock BOOLEAN DEFAULT true;
+    `);
+    
+    console.log('✅ in_stock kolonu eklendi');
+    
     // Kolonları ekle
     await pool.query(`
       ALTER TABLE orders 

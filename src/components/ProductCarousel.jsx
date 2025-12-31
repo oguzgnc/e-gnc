@@ -29,7 +29,11 @@ function ProductCarousel({ title, products }) {
   };
 
   const handleAddToCart = (product) => {
-    const selectedOption = product.options ? product.options[0] : null;
+    const parsedOptions = typeof product.options === 'string' 
+      ? JSON.parse(product.options) 
+      : product.options;
+    
+    const selectedOption = parsedOptions && parsedOptions.length > 0 ? parsedOptions[0] : null;
     if (selectedOption) {
       const success = addToCart(product, selectedOption, 1);
       if (success) {
@@ -48,20 +52,27 @@ function ProductCarousel({ title, products }) {
           <FaAngleLeft />
         </button>
         <div className="product-carousel-3d">
-          {products.map((product, index) => (
-            <div className={getCardClass(index)} key={product.id}>
-              <img src={product.image} alt={product.name} className="product-image-3d" />
-              <h3>{product.name}</h3>
-              <p className="volume">{product.volume}</p>
-              <p className="price">{product.price} TL</p>
-              <button 
-                className="product-add-btn"
-                onClick={() => handleAddToCart(product)}
-              >
-                Sepete Ekle
-              </button>
-            </div>
-          ))}
+          {products.map((product, index) => {
+            const parsedOptions = typeof product.options === 'string' 
+              ? JSON.parse(product.options) 
+              : product.options;
+            const firstOption = parsedOptions && parsedOptions[0];
+            
+            return (
+              <div className={getCardClass(index)} key={product.id || product.product_id}>
+                <img src={product.image} alt={product.name} className="product-image-3d" />
+                <h3>{product.name}</h3>
+                <p className="volume">{firstOption ? firstOption.volume : 'Birim'}</p>
+                <p className="price">{Number(product.price).toFixed(2)} TL</p>
+                <button 
+                  className="product-add-btn"
+                  onClick={() => handleAddToCart(product)}
+                >
+                  Sepete Ekle
+                </button>
+              </div>
+            );
+          })}
         </div>
         <button className="product-carousel-nav-btn right" onClick={handleNext}>
           <FaAngleRight />

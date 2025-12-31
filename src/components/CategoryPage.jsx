@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
-import { products } from '../data/products'; 
+import { productAPI } from '../services/api';
 import './CategoryPage.css'; 
 import { useCart } from '../context/CartContext';
 import Navbar from './Navbar';
@@ -13,7 +13,7 @@ const getCategoryDisplayName = (categoryId) => {
       return 'Süt Ürünleri';
     case 'et-urunleri':
       return 'Et Ürünleri';
-    case 'tarla-gubr':
+    case 'tarla-gubreleri':
       return 'Tarla Gübreleri';
     case 'baharatlar':
       return 'Baharatlar';
@@ -28,31 +28,53 @@ function CategoryPage() {
   const highlightProductId = searchParams.get('highlight');
 
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const categoryDisplayName = getCategoryDisplayName(categoryId);
 
   const { addToCart } = useCart();
 
   useEffect(() => {
-    let currentProducts = [];
-    if (categoryId) {
-      currentProducts = products.filter(product => product.category === categoryId);
-    } else {
-      currentProducts = products;
-    }
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const response = await productAPI.getAllProducts();
+        let currentProducts = response.products || [];
+        
+        // Kategori filtreleme
+        if (categoryId) {
+          currentProducts = currentProducts.filter(product => product.category === categoryId);
+        }
 
-    if (highlightProductId) {
-      const highlightedProduct = currentProducts.find(p => p.id === highlightProductId);
-      if (highlightedProduct) {
-        const otherProducts = currentProducts.filter(p => p.id !== highlightProductId);
-        currentProducts = [highlightedProduct, ...otherProducts];
+        // Stokta olmayanları gösterme
+        currentProducts = currentProducts.filter(product => product.in_stock !== false);
+
+        // Highlight edilen ürünü en üste al
+        if (highlightProductId) {
+          const highlightedProduct = currentProducts.find(p => p.product_id === highlightProductId);
+          if (highlightedProduct) {
+            const otherProducts = currentProducts.filter(p => p.product_id !== highlightProductId);
+            currentProducts = [highlightedProduct, ...otherProducts];
+          }
+        }
+        
+        setFilteredProducts(currentProducts);
+      } catch (error) {
+        console.error('Ürünler yüklenirken hata:', error);
+        setFilteredProducts([]);
+      } finally {
+        setLoading(false);
       }
-    }
-    setFilteredProducts(currentProducts);
+    };
 
+    fetchProducts();
   }, [categoryId, highlightProductId]);
 
   const handleAddToCart = (product) => {
-    const selectedOption = product.options ? product.options[0] : null;
+    const parsedOptions = typeof product.options === 'string' 
+      ? JSON.parse(product.options) 
+      : product.options;
+    
+    const selectedOption = parsedOptions && parsedOptions.length > 0 ? parsedOptions[0] : null;
     if (selectedOption) {
       const success = addToCart(product, selectedOption, 1);
       if (success) {
@@ -74,31 +96,41 @@ function CategoryPage() {
           </p>
         </div>
         
-        {filteredProducts.length === 0 ? (
+        {loading ? (
+          <p className="loading-message">Ürünler yükleniyor...</p>
+        ) : filteredProducts.length === 0 ? (
           <p className="no-products-message">Bu kategoride henüz ürün bulunmamaktadır.</p>
         ) : (
           <div className="category-products-grid">
-            {filteredProducts.map(product => (
-              <div className="category-product-card" key={product.id}>
-                <div className="product-image-wrapper">
-                  <img src={product.image} alt={product.name} className="category-product-image" />
-                </div>
-                <div className="product-info">
-                  <h3>{product.name}</h3>
-                  <p className="product-description">{product.description}</p>
-                  <p className="product-volume">{product.options && product.options[0] ? product.options[0].volume : 'Birim'}</p>
-                  <div className="product-footer">
-                    <p className="product-price">{product.price} TL</p>
-                    <button 
-                      className="add-to-cart-btn"
-                      onClick={() => handleAddToCart(product)}
-                    >
-                      Sepete Ekle
-                    </button>
+            {filteredProducts.map(product => {
+              const parsedOptions = typeof product.options === 'string' 
+                ? JSON.parse(product.options) 
+                : product.options;
+              
+              return (
+                <div className="category-product-card" key={product.id}>
+                  <div className="product-image-wrapper">
+                    <img src={product.image} alt={product.name} className="category-product-image" />
                   </div>
+                  <div className="product-info">
+                    <h3>{product.name}</h3>
+                    <p className="product-description">{product.description}</p>
+                    <p className="product-volume">
+                      {parsedOptions && parsedOptions[0] ? parsedOptions[0].volume : 'Birim'}
+                    </p>
+                    <div className="product-footer">
+                      <p className="product-price">{Number(product.price).toFixed(2)} TL</p>
+                      <button 
+                        className="add-to-cart-btn"
+                        onClick={() => handleAddToCart(product)}
+                      >
+                        Sepete Ekle
+                      </button>
+                    </div>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         )}
         

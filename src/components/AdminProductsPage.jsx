@@ -2,7 +2,7 @@
 import React from 'react';
 import './AdminProductsPage.css';
 
-function AdminProductsPage({ products, onAddProduct, onEditProduct, onDeleteProduct }) {
+function AdminProductsPage({ products, onAddProduct, onEditProduct, onDeleteProduct, onToggleStock }) {
   return (
     <div className="admin-products-page">
       <div className="page-header">
@@ -25,6 +25,7 @@ function AdminProductsPage({ products, onAddProduct, onEditProduct, onDeleteProd
               <th>Ürün Adı</th>
               <th>Kategori</th>
               <th>Fiyat</th>
+              <th>Stok</th>
               <th>Tarih</th>
               <th>İşlemler</th>
             </tr>
@@ -49,7 +50,12 @@ function AdminProductsPage({ products, onAddProduct, onEditProduct, onDeleteProd
                   <td className="td-category">
                     <span className="category-badge">{product.category}</span>
                   </td>
-                  <td className="td-price">{product.price} ₺</td>
+                  <td className="td-price">₺{Number(product.price).toFixed(2)}</td>
+                  <td className="td-stock">
+                    <span className={`stock-badge ${product.in_stock ? 'in-stock' : 'out-of-stock'}`}>
+                      {product.in_stock ? '✅ Stokta' : '❌ Tükendi'}
+                    </span>
+                  </td>
                   <td className="td-date">
                     {new Date(product.created_at).toLocaleDateString('tr-TR')}
                   </td>
@@ -59,6 +65,12 @@ function AdminProductsPage({ products, onAddProduct, onEditProduct, onDeleteProd
                       onClick={() => onEditProduct(product)}
                     >
                       ✏️ Düzenle
+                    </button>
+                    <button
+                      className={`btn-stock ${product.in_stock ? 'btn-out' : 'btn-in'}`}
+                      onClick={() => onToggleStock(product.id, !product.in_stock)}
+                    >
+                      {product.in_stock ? '📦 Stoktan Çıkar' : '✅ Stoğa Al'}
                     </button>
                     <button
                       className="btn-delete"
@@ -71,7 +83,7 @@ function AdminProductsPage({ products, onAddProduct, onEditProduct, onDeleteProd
               ))
             ) : (
               <tr>
-                <td colSpan="7" className="empty-state">
+                <td colSpan="8" className="empty-state">
                   Henüz ürün bulunmamaktadır. Yeni ürün eklemek için yukarıdaki butona tıklayın.
                 </td>
               </tr>

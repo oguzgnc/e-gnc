@@ -1,6 +1,6 @@
 // src/App.jsx
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css'; // Ana uygulama stilleri
 import Navbar from './components/Navbar'; 
 import { Link } from 'react-router-dom'; // Link bileşenini import ediyoruz
@@ -13,11 +13,32 @@ import ContactSection from './components/ContactSection';
 import BlogSection from './components/BlogSection'; 
 // import AuthPage from './components/AuthPage'; // AuthPage bileşenini import ediyoruz, rota main.jsx'te tanımlı
 
-// ! Ürün verilerini merkezi dosyadan import ediyoruz !
-import { products } from './data/products';
+// ! API'den ürünleri çekeceğiz !
+import { productAPI } from './services/api';
 
 
 function App() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await productAPI.getAllProducts();
+        // Sadece stokta olan ürünleri göster
+        const stockProducts = (response.products || []).filter(p => p.in_stock !== false);
+        setProducts(stockProducts);
+      } catch (error) {
+        console.error('Ürünler yüklenirken hata:', error);
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   return (
     <div className="App">
       <Navbar /> 
@@ -29,10 +50,16 @@ function App() {
         
         {/* Tüm Ürünler için Kaydırılabilir Bölüm */}
         {/* products prop'una tüm ürünler dizisini gönderiyoruz */}
-        <ProductCarousel 
-          title="Tüm Ürünlerimiz" 
-          products={products} 
-        />
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '50px' }}>Ürünler yükleniyor...</div>
+        ) : products.length > 0 ? (
+          <ProductCarousel 
+            title="Tüm Ürünlerimiz" 
+            products={products} 
+          />
+        ) : (
+          <div style={{ textAlign: 'center', padding: '50px' }}>Henüz ürün bulunmamaktadır.</div>
+        )}
         
         {/* Blog Bölümü (Ana Sayfa İçin Özet) */}
         <BlogSection /> 

@@ -110,6 +110,13 @@ export const productAPI = {
       method: 'DELETE',
     });
   },
+
+  toggleStock: async (productId, inStock) => {
+    return apiCall(`/products/${productId}/stock`, {
+      method: 'PUT',
+      body: JSON.stringify({ in_stock: inStock }),
+    });
+  },
 };
 
 // Order API
