@@ -1,5 +1,8 @@
 // API Service
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || 
+  (import.meta.env.MODE === 'production' 
+    ? 'https://gncsarkuteri-backend.onrender.com/api' 
+    : 'http://localhost:5000/api');
 
 // Helper function for API calls
 const apiCall = async (endpoint, options = {}) => {
