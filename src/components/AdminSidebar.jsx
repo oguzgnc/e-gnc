@@ -8,7 +8,8 @@ function AdminSidebar({ activeTab, onTabChange }) {
     { id: 'dashboard', label: 'Dashboard', icon: '📊' },
     { id: 'users', label: 'Kullanıcılar', icon: '👥' },
     { id: 'orders', label: 'Siparişler', icon: '📦' },
-    { id: 'products', label: 'Ürünler', icon: '🏷️' }
+    { id: 'products', label: 'Ürünler', icon: '🏷️' },
+    { id: 'messages', label: 'Mesajlar', icon: '💬' }
   ];
 
   return (

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import './ContactPage.css';
 import { useNavigate } from 'react-router-dom';
 import Navbar from './Navbar';
+import { contactAPI } from '../services/api';
 import '../components/AboutUsSection.css'; // Mini contact için
 
 function ContactPage() {
@@ -11,8 +12,10 @@ function ContactPage() {
     name: '',
     email: '',
     phone: '',
-    message: '' // Mesaj alanı da ekleyelim
+    subject: '',
+    message: ''
   });
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -23,20 +26,30 @@ function ContactPage() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Basit doğrulama
-    if (!formData.name || !formData.email || !formData.phone || !formData.message) {
-      alert('Lütfen tüm alanları doldurun!');
+    
+    if (!formData.name || !formData.email || !formData.message) {
+      alert('Lütfen en azından isim, email ve mesaj alanlarını doldurun!');
       return;
     }
-    // Form verilerini konsola yazdır (gerçek uygulamada bir API'ye gönderilir)
-    console.log('İletişim Formu Verileri:', formData);
-    alert('Mesajınız başarıyla gönderildi! Teşekkür ederiz.');
-    // Formu temizle
-    setFormData({ name: '', email: '', phone: '', message: '' });
-    // İsteğe bağlı: Ana sayfaya yönlendir
-    // navigate('/'); 
+
+    setLoading(true);
+    try {
+      const result = await contactAPI.sendMessage(formData);
+      
+      if (result.success) {
+        alert('Mesajınız başarıyla gönderildi! En kısa sürede size dönüş yapacağız.');
+        setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+      } else {
+        alert('Mesaj gönderilemedi: ' + (result.message || 'Bilinmeyen hata'));
+      }
+    } catch (error) {
+      console.error('Mesaj gönderme hatası:', error);
+      alert('Mesaj gönderilirken bir hata oluştu. Lütfen tekrar deneyin.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -72,12 +85,21 @@ function ContactPage() {
           <div className="form-group">
             <label htmlFor="phone">Telefon Numaranız:</label>
             <input
-              type="tel" // Telefon numarası için tel tipi
+              type="tel"
               id="phone"
               name="phone"
               value={formData.phone}
               onChange={handleChange}
-              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="subject">Konu (Opsiyonel):</label>
+            <input
+              type="text"
+              id="subject"
+              name="subject"
+              value={formData.subject}
+              onChange={handleChange}
             />
           </div>
           <div className="form-group">
@@ -85,13 +107,15 @@ function ContactPage() {
             <textarea
               id="message"
               name="message"
-              rows="5" // Metin kutusunun yüksekliği
+              rows="5"
               value={formData.message}
               onChange={handleChange}
               required
             ></textarea>
           </div>
-          <button type="submit" className="contact-submit-button">Mesajı Gönder</button>
+          <button type="submit" className="contact-submit-button" disabled={loading}>
+            {loading ? 'Gönderiliyor...' : 'Mesajı Gönder'}
+          </button>
         </form>
         <button className="back-to-home-button" onClick={() => navigate('/')}>Ana Sayfaya Dön</button>
         </div>

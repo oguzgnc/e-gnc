@@ -3,13 +3,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { adminAPI, productAPI } from '../services/api';
+import { adminAPI, productAPI, contactAPI } from '../services/api';
 import AdminSidebar from './AdminSidebar';
 import AdminNavbar from './AdminNavbar';
 import AdminDashboard from './AdminDashboard';
 import AdminUsersPage from './AdminUsersPage';
 import AdminOrdersPage from './AdminOrdersPage';
 import AdminProductsPage from './AdminProductsPage';
+import AdminContactPage from './AdminContactPage';
 import AdminProductModal from './AdminProductModal';
 import './AdminPanel.css';
 
@@ -21,6 +22,7 @@ function AdminPanel() {
   const [users, setUsers] = useState([]);
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showProductForm, setShowProductForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
@@ -39,25 +41,31 @@ function AdminPanel() {
   const loadDashboardData = async () => {
     setLoading(true);
     try {
-      const [statsRes, usersRes, ordersRes, productsRes] = await Promise.all([
+      const [statsRes, usersRes, ordersRes, productsRes, messagesRes] = await Promise.all([
         adminAPI.getDashboardStats(),
         adminAPI.getAllUsers(),
         adminAPI.getAllOrders(),
-        productAPI.getAllProducts()
+        productAPI.getAllProducts(),
+        contactAPI.getAllMessages().catch(err => {
+          console.error('Messages API error:', err);
+          return { success: false, messages: [] };
+        })
       ]);
 
       console.log('Stats Response:', statsRes);
       console.log('Users Response:', usersRes);
       console.log('Orders Response:', ordersRes);
       console.log('Products Response:', productsRes);
+      console.log('Messages Response:', messagesRes);
 
       if (statsRes.success) setStats(statsRes.stats);
       if (usersRes.success) setUsers(usersRes.users);
       if (ordersRes.success) setOrders(ordersRes.orders);
       if (productsRes.success) setProducts(productsRes.products);
+      if (messagesRes && messagesRes.success) setMessages(messagesRes.messages);
     } catch (error) {
       console.error('Veri yükleme hatası:', error);
-      alert('Veriler yüklenirken bir hata oluştu');
+      alert('Veriler yüklenirken bir hata oluştu: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -153,6 +161,32 @@ function AdminPanel() {
     }
   };
 
+  const handleMarkAsRead = async (messageId) => {
+    try {
+      const result = await contactAPI.markAsRead(messageId);
+      if (result.success) {
+        alert('Mesaj okundu olarak işaretlendi');
+        loadDashboardData();
+      }
+    } catch (error) {
+      alert('Mesaj güncellenemedi: ' + error.message);
+    }
+  };
+
+  const handleDeleteMessage = async (messageId) => {
+    if (!confirm('Bu mesajı silmek istediğinize emin misiniz?')) return;
+
+    try {
+      const result = await contactAPI.deleteMessage(messageId);
+      if (result.success) {
+        alert('Mesaj silindi');
+        loadDashboardData();
+      }
+    } catch (error) {
+      alert('Mesaj silinemedi: ' + error.message);
+    }
+  };
+
   const handleAddProduct = () => {
     setEditingProduct(null);
     setShowProductForm(true);
@@ -182,7 +216,10 @@ function AdminPanel() {
       <AdminSidebar activeTab={activeTab} onTabChange={setActiveTab} />
       
       <div className="admin-main">
-        <AdminNavbar activeTab={activeTab} />
+        <button className="admin-back-btn" onClick={() => window.location.href = '/'} title="Ana Sayfaya Dön">
+          <span>←</span>
+        </button>
+        <AdminNavbar />
         
         <div className="admin-content">
           {activeTab === 'dashboard' && <AdminDashboard stats={stats} />}
@@ -209,6 +246,14 @@ function AdminPanel() {
               onEditProduct={handleEditProduct}
               onDeleteProduct={handleDeleteProduct}
               onToggleStock={handleToggleStock}
+            />
+          )}
+
+          {activeTab === 'messages' && (
+            <AdminContactPage
+              messages={messages}
+              onMarkAsRead={handleMarkAsRead}
+              onDeleteMessage={handleDeleteMessage}
             />
           )}
         </div>

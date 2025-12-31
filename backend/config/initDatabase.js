@@ -61,6 +61,21 @@ const initDatabase = async () => {
       )
     `);
 
+    // İletişim mesajları tablosu
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS contact_messages (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) NOT NULL,
+        phone VARCHAR(50),
+        subject VARCHAR(255),
+        message TEXT NOT NULL,
+        is_read BOOLEAN DEFAULT false,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
     console.log('✅ Veritabanı tabloları başarıyla oluşturuldu');
 
     // Varsayılan admin hesabı oluştur (eğer yoksa)

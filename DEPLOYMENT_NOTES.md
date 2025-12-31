@@ -1,29 +1,173 @@
 # GNC Şarkuteri - Deployment Notları
 
-**Tarih:** 27 Aralık 2025
+**Son Güncelleme:** 31 Aralık 2025
 
 ---
 
 ## 📋 Proje Özeti
 
 **Proje Adı:** GNC Şarkuteri E-Ticaret Sitesi  
-**Frontend:** React + Vite  
+**Frontend:** React 19.1.0 + Vite 7.0.0  
 **Backend:** Node.js + Express + PostgreSQL  
 **Frontend Deploy:** Netlify  
 **Backend Deploy:** Render.com  
-**Database:** Render PostgreSQL (Free Tier)
+**Database:** PostgreSQL (localhost:4343 / Render PostgreSQL)
 
 ---
 
-## 🔗 Canlı Linkler
+## 🔗 Linkler
 
 - **Frontend URL:** https://e-genc.netlify.app
 - **Backend API URL:** https://gncsarkuteri-backend.onrender.com/api
 - **GitHub Repository:** https://github.com/oguzgnc/e-gnc
+- **Local Frontend:** http://localhost:5173
+- **Local Backend:** http://localhost:5000
 
 ---
 
-## 🎯 Bugün Yapılan İşlemler
+## 🎯 Son Güncellemeler (31 Aralık 2025)
+
+### 1. **Kategori Sistemi Düzeltildi**
+- **Eski kategoriler kaldırıldı:** sucuk, sosis, salam, pastirma, kavurma, jambon
+- **Yeni kategoriler eklendi:**
+  - `et-urunleri` - Et Ürünleri
+  - `sut-urunleri` - Süt Ürünleri
+  - `baharatlar` - Baharatlar
+  - `tarla-gubreleri` - Tarla Gübreleri
+- AdminProductModal.jsx güncellendi
+- Veritabanındaki tüm ürünlerin kategorileri güncellendi
+
+### 2. **Gerçek Ürünler Veritabanına Aktarıldı**
+Toplam **9 ürün** eklendi:
+
+**Süt Ürünleri (3):**
+- Tam Yağlı Süt (35₺ - 1L, 3L, 5L)
+- Ev Yapımı Yoğurt (50₺ - 750g, 1.5kg)
+- Ezine Peyniri (180₺ - 250g, 500g, 1kg)
+
+**Et Ürünleri (2):**
+- Ev Yapımı Sucuk (120₺ - 250g, 500g, 1kg)
+- Macar Salam (95₺ - 200g, 400g)
+
+**Tarla Gübreleri (3):**
+- Agrosol Granulous 17 (80₺ - 25kg, 50kg)
+- Agrosol Magnezyum Sülfat (110₺ - 25kg, 50kg)
+- Agrosol Max Mix Granülöz (130₺ - 25kg, 50kg)
+
+**Baharatlar (1):**
+- Dağ Kekiği (25₺ - 50g, 150g)
+
+### 3. **Ürün Görüntüleme Sistemi API'ye Bağlandı**
+**Güncellenen Dosyalar:**
+- `CategoryPage.jsx` - API'den ürün çekme, stok kontrolü
+- `ProductCarousel.jsx` - Options JSON parse
+- `App.jsx` - Ana sayfa ürünleri API'den yükleme
+
+**Özellikler:**
+- Sadece stokta olan ürünler gösteriliyor (`in_stock !== false`)
+- Options veritabanında JSONB olarak saklanıyor
+- Fiyatlar `Number()` ile parse ediliyor
+
+### 4. **Stok Yönetim Sistemi Eklendi**
+**Yeni Veritabanı Kolonu:**
+```sql
+ALTER TABLE products ADD COLUMN IF NOT EXISTS in_stock BOOLEAN DEFAULT true;
+```
+
+**Backend Endpoint:**
+```
+PUT /api/products/:id/stock
+Body: { in_stock: boolean }
+```
+
+**Admin Panel Özellikleri:**
+- ✅ Stokta / ❌ Tükendi badge'leri
+- 📦 Stoktan Çıkar / ✅ Stoğa Al butonları
+- Gerçek zamanlı stok durumu güncelleme
+
+**Güncellenen Dosyalar:**
+- `backend/controllers/productController.js` - toggleProductStock fonksiyonu
+- `backend/routes/productRoutes.js` - PUT /:id/stock route
+- `src/services/api.js` - toggleStock metodu
+- `src/components/AdminProductsPage.jsx` - Stok UI
+- `src/components/AdminProductsPage.css` - Stok stilleri
+
+### 5. **İletişim Mesajları Sistemi**
+**Yeni Veritabanı Tablosu:**
+```sql
+CREATE TABLE contact_messages (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  phone VARCHAR(50),
+  subject VARCHAR(255),
+  message TEXT NOT NULL,
+  is_read BOOLEAN DEFAULT false,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+**Backend Endpoints:**
+```
+POST   /api/contact              - Mesaj gönder (public)
+GET    /api/contact/messages     - Mesajları listele (admin)
+PUT    /api/contact/messages/:id/read - Okundu işaretle (admin)
+DELETE /api/contact/messages/:id - Mesaj sil (admin)
+```
+
+**Yeni Dosyalar:**
+- `backend/controllers/contactController.js`
+- `backend/routes/contactRoutes.js`
+- `src/components/AdminContactPage.jsx`
+- `src/components/AdminContactPage.css`
+
+**Özellikler:**
+- ContactPage formu API'ye bağlı
+- Okunmamış mesajlar yeşil çizgi ile vurgulanıyor
+- Mesaj açma/kapama, okundu işaretleme ve silme
+- Admin sidebar'da "Mesajlar" menüsü (💬)
+
+### 6. **Admin Panel UI İyileştirmeleri**
+**AdminNavbar Sadeleştirme:**
+- Dashboard yazısı kaldırıldı
+- Kullanıcı bilgisi kaldırıldı
+- Arka plan şeffaf yapıldı (`background: transparent`)
+- Sadece Çıkış butonu kaldı
+
+**Geri Butonu Eklendi:**
+- AdminPanel'e fixed position geri butonu
+- Sol üst köşede, sidebar yanında
+- Geri ok ikonu (←) kullanılıyor
+- Ana sayfaya yönlendirme
+
+**CSS Güncellemeleri:**
+```css
+.admin-back-btn {
+  position: fixed;
+  top: 12px;
+  left: 280px;
+  z-index: 100;
+}
+```
+
+### 7. **Veritabanı Yapısı**
+**Tablolar:**
+- `users` - Kullanıcılar (admin/customer rolleri)
+- `products` - Ürünler (in_stock kolonu eklendi)
+- `orders` - Siparişler (customer_name, customer_email - guest orders)
+- `order_items` - Sipariş kalemleri
+- `contact_messages` - İletişim mesajları (YENİ)
+
+**Önemli Kolonlar:**
+- `products.in_stock` (BOOLEAN) - Stok durumu
+- `products.options` (JSONB) - Ürün seçenekleri
+- `orders.user_id` (NULL olabilir) - Guest order desteği
+- `contact_messages.is_read` (BOOLEAN) - Mesaj okundu mu
+
+---
+
+## 🎯 Önceki Güncellemeler (27 Aralık 2025)
 
 ### 1. **Backend Deployment (Render.com)**
 

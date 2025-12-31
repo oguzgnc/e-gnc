@@ -137,4 +137,30 @@ export const orderAPI = {
   },
 };
 
+// Contact API
+export const contactAPI = {
+  sendMessage: async (messageData) => {
+    return apiCall('/contact', {
+      method: 'POST',
+      body: JSON.stringify(messageData),
+    });
+  },
+
+  getAllMessages: async () => {
+    return apiCall('/contact/messages');
+  },
+
+  markAsRead: async (messageId) => {
+    return apiCall(`/contact/messages/${messageId}/read`, {
+      method: 'PUT',
+    });
+  },
+
+  deleteMessage: async (messageId) => {
+    return apiCall(`/contact/messages/${messageId}`, {
+      method: 'DELETE',
+    });
+  },
+};
+
 export default apiCall;
