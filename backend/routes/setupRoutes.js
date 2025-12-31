@@ -137,7 +137,6 @@ router.post('/seed-products', async (req, res) => {
         const result = await pool.query(
           `INSERT INTO products (product_id, name, description, category, price, image, options, in_stock) 
            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-           ON CONFLICT (product_id) DO NOTHING
            RETURNING product_id`,
           [
             product.product_id,
@@ -150,13 +149,10 @@ router.post('/seed-products', async (req, res) => {
             true
           ]
         );
-        if (result.rows.length > 0) {
-          addedCount++;
-        } else {
-          skippedCount++;
-        }
+        addedCount++;
+        console.log(`✅ ${product.name} eklendi`);
       } catch (err) {
-        console.error(`Ürün eklenemedi: ${product.name}`, err);
+        console.error(`⚠️ Ürün eklenemedi: ${product.name}`, err.message);
         skippedCount++;
       }
     }
