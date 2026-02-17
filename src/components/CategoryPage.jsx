@@ -13,6 +13,8 @@ const getCategoryDisplayName = (categoryId) => {
       return 'Süt Ürünleri';
     case 'et-urunleri':
       return 'Et Ürünleri';
+    case 'ev-esyalari':
+      return 'Ev Eşyaları';
     case 'tarla-gubreleri':
       return 'Tarla Gübreleri';
     case 'baharatlar':

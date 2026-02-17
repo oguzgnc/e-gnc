@@ -1,8 +1,8 @@
 // src/components/HeroSection.jsx
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { FaCheese, FaDrumstickBite, FaSeedling, FaLeaf } from 'react-icons/fa';
+import { FaCheese, FaDrumstickBite, FaSeedling, FaLeaf, FaHome } from 'react-icons/fa';
 import './HeroSection.css';
 
 // Kategori ikonlarını döndüren yardımcı fonksiyon
@@ -14,6 +14,8 @@ const getCategoryIcon = (categoryId) => {
       return <FaDrumstickBite className="hero-category-icon" />;
     case 'tarla-gubr':
       return <FaSeedling className="hero-category-icon" />;
+    case 'ev-esyalari':
+      return <FaHome className="hero-category-icon" />;
     case 'baharatlar':
       return <FaLeaf className="hero-category-icon" />;
     default:
@@ -30,6 +32,8 @@ const getCategoryDisplayName = (categoryId) => {
       return 'Et Ürünleri';
     case 'tarla-gubr':
       return 'Tarla Gübreleri';
+    case 'ev-esyalari':
+      return 'Ev Eşyaları';
     case 'baharatlar':
       return 'Baharatlar';
     default:
@@ -38,7 +42,31 @@ const getCategoryDisplayName = (categoryId) => {
 };
 
 function HeroSection() {
-  const allCategories = ['sut-urunleri', 'et-urunleri', 'tarla-gubr', 'baharatlar'];
+  const [allCategories, setAllCategories] = useState([
+    'sut-urunleri',
+    'et-urunleri',
+    'tarla-gubr',
+    'baharatlar',
+    'ev-esyalari'
+  ]);
+
+  useEffect(() => {
+    // Fetch dynamic categories from API
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch(`${(import.meta.env.VITE_API_URL || (import.meta.env.MODE === 'production' ? 'https://gncsarkuteri-backend.onrender.com/api' : 'http://localhost:5000/api')).replace(/\/$/, '')}/categories`);
+        const data = await res.json();
+        if (data && data.categories) {
+          setAllCategories(data.categories.map(c => c.id || c.key));
+        }
+      } catch (err) {
+        // keep defaults on error
+        console.error('Kategori yüklenemedi:', err);
+      }
+    };
+
+    fetchCategories();
+  }, []);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleNext = () => {

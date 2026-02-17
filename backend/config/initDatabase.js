@@ -1,6 +1,10 @@
 import pool from './database.js';
 
 // Initialize database tables
+// Note: Destructive operations (DROP TABLE, TRUNCATE, etc.) MUST be guarded
+// and executed only in development. Use NODE_ENV==='development' or set FORCE_DB_INIT=true to allow.
+const isDev = process.env.NODE_ENV === 'development';
+
 const initDatabase = async () => {
   try {
     // Create users table
@@ -101,6 +105,11 @@ const initDatabase = async () => {
       
       console.log('✅ Varsayılan admin hesabı oluşturuldu (admin@gncsarkuteri.com / admin123)');
     }
+    
+    // Example: If there were DROP TABLE statements, they should be wrapped like:
+    // if (isDev) {
+    //   await pool.query('DROP TABLE IF EXISTS some_table');
+    // }
   } catch (error) {
     console.error('❌ Veritabanı başlatma hatası:', error);
     throw error;

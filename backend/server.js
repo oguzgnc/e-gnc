@@ -8,11 +8,16 @@ import productRoutes from './routes/productRoutes.js';
 import setupRoutes from './routes/setupRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+// Decide whether to run DB initialization:
+// - In development run by default
+// - In production skip unless FORCE_DB_INIT=true
+const SHOULD_INIT_DB = process.env.FORCE_DB_INIT === 'true' || process.env.NODE_ENV !== 'production';
 
 // Middleware
 app.use(cors());
@@ -26,6 +31,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/setup', setupRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/categories', categoryRoutes);
 
 // Test route
 app.get('/', (req, res) => {
@@ -57,7 +63,11 @@ app.use((err, req, res, next) => {
 // Initialize database and start server
 const startServer = async () => {
   try {
-    await initDatabase();
+    if (SHOULD_INIT_DB) {
+      await initDatabase();
+    } else {
+      console.log('ℹ️ Skipping database initialization (production mode)');
+    }
     app.listen(PORT, () => {
       console.log(`🚀 Server ${PORT} portunda çalışıyor`);
       console.log(`📍 http://localhost:${PORT}`);

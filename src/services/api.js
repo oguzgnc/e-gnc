@@ -122,6 +122,13 @@ export const productAPI = {
   },
 };
 
+// Category API
+export const categoryAPI = {
+  getCategories: async () => {
+    return apiCall('/categories');
+  },
+};
+
 // Order API
 export const orderAPI = {
   createOrder: async (orderData) => {

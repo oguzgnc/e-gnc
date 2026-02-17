@@ -37,6 +37,23 @@ function AdminProductModal({ isOpen, onClose, onSave, product }) {
     }
   }, [product, isOpen]);
 
+  // Load categories dynamically
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_URL || (import.meta.env.MODE === 'production' ? 'https://gncsarkuteri-backend.onrender.com/api' : 'http://localhost:5000/api')}/categories`);
+        const data = await res.json();
+        if (data && data.categories) {
+          setCategories(data.categories.map(c => ({ id: c.id || c.key, name: c.name || c.id || c.key })));
+        }
+      } catch (err) {
+        console.error('Kategori yüklenemedi:', err);
+      }
+    };
+    if (isOpen) fetchCategories();
+  }, [isOpen]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onSave(formData);
@@ -116,10 +133,19 @@ function AdminProductModal({ isOpen, onClose, onSave, product }) {
                 required
               >
                 <option value="">Kategori Seçin</option>
-                <option value="et-urunleri">Et Ürünleri</option>
-                <option value="sut-urunleri">Süt Ürünleri</option>
-                <option value="baharatlar">Baharatlar</option>
-                <option value="tarla-gubreleri">Tarla Gübreleri</option>
+                {categories && categories.length > 0 ? (
+                  categories.map(c => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))
+                ) : (
+                  <>
+                    <option value="et-urunleri">Et Ürünleri</option>
+                    <option value="sut-urunleri">Süt Ürünleri</option>
+                    <option value="ev-esyalari">Ev Eşyaları</option>
+                    <option value="baharatlar">Baharatlar</option>
+                    <option value="tarla-gubreleri">Tarla Gübreleri</option>
+                  </>
+                )}
               </select>
             </div>
 
