@@ -4,3 +4,5 @@ build/
 .env
 .DS_Store
 backend/.env
+frontend/.env
+frontend/.env.production
