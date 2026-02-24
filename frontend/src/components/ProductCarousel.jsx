@@ -6,6 +6,7 @@ import './ProductCarousel.css';
 import { useCart } from '../context/CartContext';
 
 function ProductCarousel({ title, products }) {
+  const API_BASE = (import.meta.env.VITE_API_URL || (import.meta.env.MODE === 'production' ? 'https://gncsarkuteri-backend.onrender.com/api' : 'http://localhost:5000/api')).replace(/\/api$/,'');
   const [currentIndex, setCurrentIndex] = useState(0);
   const { addToCart } = useCart();
 
@@ -29,18 +30,30 @@ function ProductCarousel({ title, products }) {
   };
 
   const handleAddToCart = (product) => {
-    const parsedOptions = typeof product.options === 'string' 
-      ? JSON.parse(product.options) 
-      : product.options;
-    
-    const selectedOption = parsedOptions && parsedOptions.length > 0 ? parsedOptions[0] : null;
-    if (selectedOption) {
-      const success = addToCart(product, selectedOption, 1);
-      if (success) {
-        alert(`${product.name} (${selectedOption.volume}) sepete eklendi!`);
+    // Normalize options similar to other components
+    let parsedOptions = [];
+    try {
+      if (typeof product.options === 'string') {
+        parsedOptions = JSON.parse(product.options || '[]');
+      } else if (Array.isArray(product.options)) {
+        parsedOptions = product.options;
+      } else if (product.options && typeof product.options === 'object') {
+        parsedOptions = [product.options];
+      } else {
+        parsedOptions = [];
       }
-    } else {
-      alert(`Ürününüz (${product.name}) seçenekleri bulunamadı. Lütfen ürün detay sayfasından ekleyiniz.`);
+    } catch (e) {
+      parsedOptions = [];
+    }
+
+    if (!parsedOptions || parsedOptions.length === 0) {
+      parsedOptions = [{ volume: 'Standart', price: Number(product.price) || 0 }];
+    }
+
+    const selectedOption = parsedOptions[0];
+    const success = addToCart(product, selectedOption, 1);
+    if (success) {
+      alert(`${product.name} (${selectedOption.volume}) sepete eklendi!`);
     }
   };
 
@@ -53,14 +66,25 @@ function ProductCarousel({ title, products }) {
         </button>
         <div className="product-carousel-3d">
           {products.map((product, index) => {
-            const parsedOptions = typeof product.options === 'string' 
-              ? JSON.parse(product.options) 
-              : product.options;
-            const firstOption = parsedOptions && parsedOptions[0];
+            let parsedOptions = [];
+            try {
+              if (typeof product.options === 'string') {
+                parsedOptions = JSON.parse(product.options || '[]');
+              } else if (Array.isArray(product.options)) {
+                parsedOptions = product.options;
+              } else if (product.options && typeof product.options === 'object') {
+                parsedOptions = [product.options];
+              } else {
+                parsedOptions = [];
+              }
+            } catch (e) {
+              parsedOptions = [];
+            }
+            const firstOption = (parsedOptions && parsedOptions.length > 0) ? parsedOptions[0] : { volume: 'Birim' };
             
             return (
               <div className={getCardClass(index)} key={product.id || product.product_id}>
-                <img src={product.image} alt={product.name} className="product-image-3d" />
+                <img src={product.image && product.image.startsWith('/uploads') ? `${API_BASE}${product.image}` : product.image} alt={product.name} className="product-image-3d" />
                 <h3>{product.name}</h3>
                 <p className="volume">{firstOption ? firstOption.volume : 'Birim'}</p>
                 <p className="price">{Number(product.price).toFixed(2)} TL</p>

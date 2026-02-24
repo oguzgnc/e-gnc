@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import './AdminProductModal.css';
 
 function AdminProductModal({ isOpen, onClose, onSave, product }) {
+  const API_BASE = (import.meta.env.VITE_API_URL || (import.meta.env.MODE === 'production' ? 'https://gncsarkuteri-backend.onrender.com/api' : 'http://localhost:5000/api')).replace(/\/api$/,'');
   const [formData, setFormData] = useState({
     product_id: '',
     name: '',
@@ -65,6 +66,18 @@ function AdminProductModal({ isOpen, onClose, onSave, product }) {
       ...prev,
       [name]: value
     }));
+  };
+
+  const [previewSrc, setPreviewSrc] = useState('');
+  const handleFileChange = (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (file) {
+      setFormData(prev => ({ ...prev, imageFile: file, image: '' }));
+      setPreviewSrc(URL.createObjectURL(file));
+    } else {
+      setFormData(prev => ({ ...prev, imageFile: undefined }));
+      setPreviewSrc('');
+    }
   };
 
   if (!isOpen) return null;
@@ -169,18 +182,16 @@ function AdminProductModal({ isOpen, onClose, onSave, product }) {
 
           <div className="form-row">
             <div className="form-group">
-              <label className="form-label">Resim URL</label>
+              <label className="form-label">Resim Seç</label>
               <input
-                type="text"
-                name="image"
+                type="file"
+                accept="image/*"
                 className="form-input"
-                value={formData.image}
-                onChange={handleChange}
-                placeholder="https://example.com/image.jpg"
+                onChange={handleFileChange}
               />
-              {formData.image && (
+              {(previewSrc || formData.image) && (
                 <div className="image-preview">
-                  <img src={formData.image} alt="Preview" />
+                  <img src={previewSrc || (formData.image && formData.image.startsWith('/uploads') ? `${API_BASE}${formData.image}` : formData.image)} alt="Preview" />
                 </div>
               )}
             </div>

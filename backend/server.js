@@ -9,6 +9,10 @@ import setupRoutes from './routes/setupRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 dotenv.config();
 
@@ -24,6 +28,24 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Resolve __dirname for ES modules and serve uploads statically before routes
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Debug: list uploads/products directory contents (if exists)
+try {
+  const uploadsProductsPath = path.join(__dirname, 'uploads', 'products');
+  const exists = fs.existsSync(uploadsProductsPath);
+  console.log('Static uploads path:', path.join(__dirname, 'uploads'));
+  console.log('uploads/products exists:', exists);
+  if (exists) {
+    const files = fs.readdirSync(uploadsProductsPath);
+    console.log('uploads/products files:', files);
+  }
+} catch (err) {
+  console.error('Error listing uploads directory:', err);
+}
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
@@ -32,6 +54,8 @@ app.use('/api/setup', setupRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/categories', categoryRoutes);
+
+// Serve uploads statically (duplicate removed above)
 
 // Test route
 app.get('/', (req, res) => {

@@ -7,14 +7,17 @@ const API_URL = import.meta.env.VITE_API_URL ||
 // Helper function for API calls
 const apiCall = async (endpoint, options = {}) => {
   const token = localStorage.getItem('token');
-  
+
+  // Build headers: if options.body is a FormData, DO NOT set Content-Type so browser can add boundary
+  const headers = (options && options.headers) || {};
+  if (!(options && options.body instanceof FormData)) {
+    headers['Content-Type'] = 'application/json';
+  }
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+
   const config = {
     ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token && { Authorization: `Bearer ${token}` }),
-      ...options.headers,
-    },
+    headers,
   };
 
   try {
@@ -95,17 +98,31 @@ export const productAPI = {
   },
 
   createProduct: async (productData) => {
-    return apiCall('/products', {
+    const token = localStorage.getItem('token');
+    const url = `${API_URL}/products`;
+    const headers = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    const response = await fetch(url, {
       method: 'POST',
-      body: JSON.stringify(productData),
+      headers,
+      body: productData, // productData should be FormData
     });
+    if (!response.ok) throw new Error('Oluşturma başarısız');
+    return response.json();
   },
 
   updateProduct: async (productId, productData) => {
-    return apiCall(`/products/${productId}`, {
+    const token = localStorage.getItem('token');
+    const url = `${API_URL}/products/${productId}`;
+    const headers = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    const response = await fetch(url, {
       method: 'PUT',
-      body: JSON.stringify(productData),
+      headers,
+      body: productData, // productData should be FormData
     });
+    if (!response.ok) throw new Error('Güncelleme başarısız');
+    return response.json();
   },
 
   deleteProduct: async (productId) => {

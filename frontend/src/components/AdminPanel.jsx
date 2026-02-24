@@ -113,9 +113,56 @@ function AdminPanel() {
     setLoading(true);
     
     try {
-      const result = editingProduct 
-        ? await productAPI.updateProduct(editingProduct.id, formData)
-        : await productAPI.createProduct(formData);
+      // Normalize options: ensure it's an array. If empty or invalid, create a default option using price.
+      const normalized = { ...formData };
+      try {
+        if (typeof normalized.options === 'string') {
+          normalized.options = JSON.parse(normalized.options || '[]');
+        }
+      } catch (e) {
+        normalized.options = [];
+      }
+
+      if (!Array.isArray(normalized.options)) {
+        // If it's an object with keys, wrap as single option; otherwise fallback to default option
+        if (normalized.options && typeof normalized.options === 'object' && Object.keys(normalized.options).length > 0) {
+          normalized.options = [normalized.options];
+        } else {
+          normalized.options = [{ volume: 'Standart', price: Number(normalized.price) || 0 }];
+        }
+      }
+
+      let result;
+      // If an image file was selected, send as FormData
+      if (normalized.imageFile) {
+        const fd = new FormData();
+        // Ensure product_id is present (if editing and product_id not in form, use existing product.product_id or id)
+        const pid = normalized.product_id || (editingProduct && (editingProduct.product_id || editingProduct.id)) || '';
+        fd.append('product_id', pid);
+        fd.append('name', normalized.name || '');
+        fd.append('description', normalized.description || '');
+        fd.append('category', normalized.category || '');
+        fd.append('price', String(normalized.price || '0'));
+        fd.append('options', JSON.stringify(normalized.options || []));
+        fd.append('image', normalized.imageFile);
+
+        // Debug: log FormData entries
+        for (const pair of fd.entries()) {
+          console.log('FormData entry:', pair[0], pair[1]);
+        }
+
+        result = editingProduct
+          ? await productAPI.updateProduct(editingProduct.id, fd)
+          : await productAPI.createProduct(fd);
+      } else {
+        // Ensure product_id set when editing even if no file
+        if (editingProduct && !normalized.product_id) {
+          normalized.product_id = editingProduct.product_id || editingProduct.id || '';
+        }
+        result = editingProduct 
+          ? await productAPI.updateProduct(editingProduct.id, normalized)
+          : await productAPI.createProduct(normalized);
+      }
       
       if (result.success) {
         alert(editingProduct ? 'Ürün güncellendi' : 'Ürün eklendi');

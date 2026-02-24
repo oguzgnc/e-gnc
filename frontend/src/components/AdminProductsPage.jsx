@@ -3,6 +3,7 @@ import React from 'react';
 import './AdminProductsPage.css';
 
 function AdminProductsPage({ products, onAddProduct, onEditProduct, onDeleteProduct, onToggleStock }) {
+  const API_BASE = (import.meta.env.VITE_API_URL || (import.meta.env.MODE === 'production' ? 'https://gncsarkuteri-backend.onrender.com/api' : 'http://localhost:5000/api')).replace(/\/api$/,'');
   return (
     <div className="admin-products-page">
       <div className="page-header">
@@ -38,7 +39,7 @@ function AdminProductsPage({ products, onAddProduct, onEditProduct, onDeleteProd
                   <td className="td-image">
                     {product.image ? (
                       <img
-                        src={product.image}
+                        src={product.image && product.image.startsWith('/uploads') ? `${API_BASE}${product.image}` : product.image}
                         alt={product.name}
                         className="product-thumbnail"
                       />

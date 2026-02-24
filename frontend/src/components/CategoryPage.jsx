@@ -6,6 +6,7 @@ import { productAPI } from '../services/api';
 import './CategoryPage.css'; 
 import { useCart } from '../context/CartContext';
 import Navbar from './Navbar';
+const API_BASE = (import.meta.env.VITE_API_URL || (import.meta.env.MODE === 'production' ? 'https://gncsarkuteri-backend.onrender.com/api' : 'http://localhost:5000/api')).replace(/\/api$/,'');
 
 const getCategoryDisplayName = (categoryId) => {
   switch (categoryId) {
@@ -72,18 +73,31 @@ function CategoryPage() {
   }, [categoryId, highlightProductId]);
 
   const handleAddToCart = (product) => {
-    const parsedOptions = typeof product.options === 'string' 
-      ? JSON.parse(product.options) 
-      : product.options;
-    
-    const selectedOption = parsedOptions && parsedOptions.length > 0 ? parsedOptions[0] : null;
-    if (selectedOption) {
-      const success = addToCart(product, selectedOption, 1);
-      if (success) {
-        alert(`${product.name} (${selectedOption.volume}) sepete eklendi!`);
+    // Normalize options to array and provide a default option if none exist
+    let parsedOptions = [];
+    try {
+      if (typeof product.options === 'string') {
+        parsedOptions = JSON.parse(product.options || '[]');
+      } else if (Array.isArray(product.options)) {
+        parsedOptions = product.options;
+      } else if (product.options && typeof product.options === 'object') {
+        parsedOptions = [product.options];
+      } else {
+        parsedOptions = [];
       }
-    } else {
-      alert(`Ürününüzün (${product.name}) seçenekleri bulunamadı. Lütfen ürün detay sayfasından ekleyiniz.`);
+    } catch (e) {
+      parsedOptions = [];
+    }
+
+    if (!parsedOptions || parsedOptions.length === 0) {
+      // Fallback: create a default option from product.price
+      parsedOptions = [{ volume: 'Standart', price: Number(product.price) || 0 }];
+    }
+
+    const selectedOption = parsedOptions[0];
+    const success = addToCart(product, selectedOption, 1);
+    if (success) {
+      alert(`${product.name} (${selectedOption.volume}) sepete eklendi!`);
     }
   };
 
@@ -112,7 +126,7 @@ function CategoryPage() {
               return (
                 <div className="category-product-card" key={product.id}>
                   <div className="product-image-wrapper">
-                    <img src={product.image} alt={product.name} className="category-product-image" />
+                    <img src={product.image && product.image.startsWith('/uploads') ? `${API_BASE}${product.image}` : product.image} alt={product.name} className="category-product-image" />
                   </div>
                   <div className="product-info">
                     <h3>{product.name}</h3>
