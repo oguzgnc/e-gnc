@@ -31,7 +31,7 @@ app.use(express.urlencoded({ extended: true }));
 // Resolve __dirname for ES modules and serve uploads statically before routes
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/api/uploads', express.static(path.join(__dirname, 'uploads')));
 // Debug: list uploads/products directory contents (if exists)
 try {
   const uploadsProductsPath = path.join(__dirname, 'uploads', 'products');

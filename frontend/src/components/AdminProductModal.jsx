@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import './AdminProductModal.css';
 
 function AdminProductModal({ isOpen, onClose, onSave, product }) {
-  const API_BASE = (import.meta.env.VITE_API_URL || (import.meta.env.MODE === 'production' ? 'https://gncsarkuteri-backend.onrender.com/api' : 'http://localhost:5000/api')).replace(/\/api$/,'');
+  const imgBaseUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace(/\/api$/, '') : 'http://localhost:5000';
   const [formData, setFormData] = useState({
     product_id: '',
     name: '',
@@ -191,7 +191,7 @@ function AdminProductModal({ isOpen, onClose, onSave, product }) {
               />
               {(previewSrc || formData.image) && (
                 <div className="image-preview">
-                  <img src={previewSrc || (formData.image && formData.image.startsWith('/uploads') ? `${API_BASE}${formData.image}` : formData.image)} alt="Preview" />
+                  <img src={previewSrc || (formData.image && (formData.image.startsWith('/uploads') || formData.image.startsWith('/api/uploads')) ? `${imgBaseUrl}${formData.image}` : formData.image)} alt="Preview" />
                 </div>
               )}
             </div>

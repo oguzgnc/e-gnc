@@ -6,7 +6,7 @@ import { productAPI } from '../services/api';
 import './CategoryPage.css'; 
 import { useCart } from '../context/CartContext';
 import Navbar from './Navbar';
-const API_BASE = (import.meta.env.VITE_API_URL || (import.meta.env.MODE === 'production' ? 'https://gncsarkuteri-backend.onrender.com/api' : 'http://localhost:5000/api')).replace(/\/api$/,'');
+const imgBaseUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace(/\/api$/, '') : 'http://localhost:5000';
 
 const getCategoryDisplayName = (categoryId) => {
   switch (categoryId) {
@@ -126,7 +126,7 @@ function CategoryPage() {
               return (
                 <div className="category-product-card" key={product.id}>
                   <div className="product-image-wrapper">
-                    <img src={product.image && product.image.startsWith('/uploads') ? `${API_BASE}${product.image}` : product.image} alt={product.name} className="category-product-image" />
+                    <img src={product.image && (product.image.startsWith('/uploads') || product.image.startsWith('/api/uploads')) ? `${imgBaseUrl}${product.image}` : product.image} alt={product.name} className="category-product-image" />
                   </div>
                   <div className="product-info">
                     <h3>{product.name}</h3>

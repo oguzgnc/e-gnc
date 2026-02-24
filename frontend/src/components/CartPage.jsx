@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext'; // Auth Context'ini kullanmak 
 import { orderAPI } from '../services/api'; // Order API
 import './CartPage.css'; // Stil dosyası
 import { useNavigate } from 'react-router-dom'; // Yönlendirme için
-const API_BASE = (import.meta.env.VITE_API_URL || (import.meta.env.MODE === 'production' ? 'https://gncsarkuteri-backend.onrender.com/api' : 'http://localhost:5000/api')).replace(/\/api$/,'');
+const imgBaseUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace(/\/api$/, '') : 'http://localhost:5000';
 
 function CartPage() {
   const { cartItems, updateQuantity, removeFromCart, getCartTotal, clearCart } = useCart();
@@ -122,7 +122,7 @@ function CartPage() {
           <div className="cart-items-list">
             {cartItems.map((item, index) => (
               <div key={index} className="cart-item-card">
-                <img src={item.product.image && item.product.image.startsWith('/uploads') ? `${API_BASE}${item.product.image}` : item.product.image} alt={item.product.name} className="cart-item-image" />
+                <img src={item.product.image && (item.product.image.startsWith('/uploads') || item.product.image.startsWith('/api/uploads')) ? `${imgBaseUrl}${item.product.image}` : item.product.image} alt={item.product.name} className="cart-item-image" />
                 <div className="item-details">
                   <h3>{item.product.name}</h3>
                   <p>{item.selectedOption.volume} - {item.selectedOption.price} TL</p>

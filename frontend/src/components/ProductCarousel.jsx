@@ -6,7 +6,7 @@ import './ProductCarousel.css';
 import { useCart } from '../context/CartContext';
 
 function ProductCarousel({ title, products }) {
-  const API_BASE = (import.meta.env.VITE_API_URL || (import.meta.env.MODE === 'production' ? 'https://gncsarkuteri-backend.onrender.com/api' : 'http://localhost:5000/api')).replace(/\/api$/,'');
+  const imgBaseUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace(/\/api$/, '') : 'http://localhost:5000';
   const [currentIndex, setCurrentIndex] = useState(0);
   const { addToCart } = useCart();
 
@@ -84,7 +84,7 @@ function ProductCarousel({ title, products }) {
             
             return (
               <div className={getCardClass(index)} key={product.id || product.product_id}>
-                <img src={product.image && product.image.startsWith('/uploads') ? `${API_BASE}${product.image}` : product.image} alt={product.name} className="product-image-3d" />
+                <img src={product.image && (product.image.startsWith('/uploads') || product.image.startsWith('/api/uploads')) ? `${imgBaseUrl}${product.image}` : product.image} alt={product.name} className="product-image-3d" />
                 <h3>{product.name}</h3>
                 <p className="volume">{firstOption ? firstOption.volume : 'Birim'}</p>
                 <p className="price">{Number(product.price).toFixed(2)} TL</p>

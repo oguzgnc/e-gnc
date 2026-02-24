@@ -47,7 +47,7 @@ export const processProductImage = async (req, res, next) => {
       .toFile(physicalPath);
 
     // public URL path to store in DB and send to clients
-    req.customImageUrl = `/uploads/products/${filename}`;
+    req.customImageUrl = `/api/uploads/products/${filename}`;
     console.log('File processed and saved, req.customImageUrl set to', req.customImageUrl);
     next();
   } catch (e) {
