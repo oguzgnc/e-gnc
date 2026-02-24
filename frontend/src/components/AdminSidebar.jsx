@@ -9,6 +9,7 @@ function AdminSidebar({ activeTab, onTabChange }) {
     { id: 'users', label: 'Kullanıcılar', icon: '👥' },
     { id: 'orders', label: 'Siparişler', icon: '📦' },
     { id: 'products', label: 'Ürünler', icon: '🏷️' },
+    { id: 'categories', label: 'Kategoriler', icon: '🗂️' },
     { id: 'messages', label: 'Mesajlar', icon: '💬' }
   ];
 

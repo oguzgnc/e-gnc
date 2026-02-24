@@ -12,7 +12,7 @@ const getCategoryIcon = (categoryId) => {
       return <FaCheese className="hero-category-icon" />;
     case 'et-urunleri':
       return <FaDrumstickBite className="hero-category-icon" />;
-    case 'tarla-gubr':
+    case 'tarla-gubreleri':
       return <FaSeedling className="hero-category-icon" />;
     case 'ev-esyalari':
       return <FaHome className="hero-category-icon" />;
@@ -23,44 +23,27 @@ const getCategoryIcon = (categoryId) => {
   }
 };
 
-// Kategori görünen adını döndüren yardımcı fonksiyon
-const getCategoryDisplayName = (categoryId) => {
-  switch (categoryId) {
-    case 'sut-urunleri':
-      return 'Süt Ürünleri';
-    case 'et-urunleri':
-      return 'Et Ürünleri';
-    case 'tarla-gubr':
-      return 'Tarla Gübreleri';
-    case 'ev-esyalari':
-      return 'Ev Eşyaları';
-    case 'baharatlar':
-      return 'Baharatlar';
-    default:
-      return 'Kategori';
-  }
-};
+
+const DEFAULT_CATEGORIES = [
+  { slug: 'sut-urunleri',    name: 'Süt Ürünleri' },
+  { slug: 'et-urunleri',     name: 'Et Ürünleri' },
+  { slug: 'tarla-gubreleri', name: 'Tarla Gübreleri' },
+  { slug: 'baharatlar',      name: 'Baharatlar' },
+  { slug: 'ev-esyalari',     name: 'Ev Eşyaları' }
+];
 
 function HeroSection() {
-  const [allCategories, setAllCategories] = useState([
-    'sut-urunleri',
-    'et-urunleri',
-    'tarla-gubr',
-    'baharatlar',
-    'ev-esyalari'
-  ]);
+  const [allCategories, setAllCategories] = useState(DEFAULT_CATEGORIES);
 
   useEffect(() => {
-    // Fetch dynamic categories from API
     const fetchCategories = async () => {
       try {
         const res = await fetch(`${(import.meta.env.VITE_API_URL || (import.meta.env.MODE === 'production' ? 'https://gncsarkuteri-backend.onrender.com/api' : 'http://localhost:5000/api')).replace(/\/$/, '')}/categories`);
         const data = await res.json();
-        if (data && data.categories) {
-          setAllCategories(data.categories.map(c => c.id || c.key));
+        if (data && data.categories && data.categories.length > 0) {
+          setAllCategories(data.categories.map(c => ({ slug: c.slug, name: c.name })));
         }
       } catch (err) {
-        // keep defaults on error
         console.error('Kategori yüklenemedi:', err);
       }
     };
@@ -98,13 +81,12 @@ function HeroSection() {
         <div className="carousel-3d">
           {allCategories.map((category, index) => (
             <NavLink 
-              key={category} 
-              to={`/categories/${category}`} 
+              key={category.slug} 
+              to={`/categories/${category.slug}`} 
               className={`category-card-3d ${getCardClass(index)}`}
               onClick={(e) => {
                 if (getCardClass(index) !== 'card-active') {
                   e.preventDefault();
-                  // Tıklanan karta göre kaydır
                   const diff = (index - currentIndex + allCategories.length) % allCategories.length;
                   if (diff === 1) {
                     handleNext();
@@ -114,8 +96,8 @@ function HeroSection() {
                 }
               }}
             >
-              {getCategoryIcon(category)}
-              <h3 className="category-name-3d">{getCategoryDisplayName(category)}</h3>
+              {getCategoryIcon(category.slug)}
+              <h3 className="category-name-3d">{category.name}</h3>
             </NavLink>
           ))}
         </div>
@@ -126,9 +108,9 @@ function HeroSection() {
       </div>
       
       <div className="carousel-dots">
-        {allCategories.map((_, index) => (
+        {allCategories.map((category, index) => (
           <button
-            key={index}
+            key={category.slug}
             className={`dot ${index === currentIndex ? 'active' : ''}`}
             onClick={() => setCurrentIndex(index)}
           />

@@ -65,6 +65,59 @@ const initDatabase = async () => {
       )
     `);
 
+    // Kategoriler tablosu
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS categories (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        slug VARCHAR(255) UNIQUE NOT NULL
+      )
+    `);
+
+    // Migration: slug kolonu yoksa ekle
+    await pool.query(`
+      ALTER TABLE categories ADD COLUMN IF NOT EXISTS slug VARCHAR(255)
+    `);
+    // slug için unique constraint yoksa ekle
+    await pool.query(`
+      DO $$
+      BEGIN
+        IF NOT EXISTS (
+          SELECT 1 FROM pg_constraint
+          WHERE conname = 'categories_slug_key'
+        ) THEN
+          ALTER TABLE categories ADD CONSTRAINT categories_slug_key UNIQUE (slug);
+        END IF;
+      END$$
+    `);
+    // slug boş olan satırları name'den üret
+    await pool.query(`
+      UPDATE categories
+      SET slug = LOWER(
+        REGEXP_REPLACE(
+          TRANSLATE(name, 'şŞğĞüÜöÖıİçÇ', 'ssggvuoouicc'),
+          '[^a-z0-9]+', '-', 'g'
+        )
+      )
+      WHERE slug IS NULL OR slug = ''
+    `);
+
+    // Varsayılan kategorileri ekle (yoksa) — key sütunu da doldur
+    const defaultCategories = [
+      { name: 'Et Ürünleri',     slug: 'et-urunleri' },
+      { name: 'Süt Ürünleri',    slug: 'sut-urunleri' },
+      { name: 'Ev Eşyaları',     slug: 'ev-esyalari' },
+      { name: 'Baharatlar',      slug: 'baharatlar' },
+      { name: 'Tarla Gübreleri', slug: 'tarla-gubreleri' }
+    ];
+    for (const cat of defaultCategories) {
+      await pool.query(
+        `INSERT INTO categories (key, name, slug) VALUES ($1, $2, $1)
+         ON CONFLICT (key) DO UPDATE SET slug = EXCLUDED.slug`,
+        [cat.slug, cat.name]
+      );
+    }
+
     // İletişim mesajları tablosu
     await pool.query(`
       CREATE TABLE IF NOT EXISTS contact_messages (

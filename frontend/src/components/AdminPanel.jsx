@@ -11,6 +11,7 @@ import AdminUsersPage from './AdminUsersPage';
 import AdminOrdersPage from './AdminOrdersPage';
 import AdminProductsPage from './AdminProductsPage';
 import AdminContactPage from './AdminContactPage';
+import AdminCategoriesPage from './AdminCategoriesPage';
 import AdminProductModal from './AdminProductModal';
 import './AdminPanel.css';
 
@@ -294,6 +295,10 @@ function AdminPanel() {
               onDeleteProduct={handleDeleteProduct}
               onToggleStock={handleToggleStock}
             />
+          )}
+
+          {activeTab === 'categories' && (
+            <AdminCategoriesPage />
           )}
 
           {activeTab === 'messages' && (

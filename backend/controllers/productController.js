@@ -1,4 +1,22 @@
 import pool from '../config/database.js';
+import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const deleteImageFile = async (imageUrl) => {
+  if (!imageUrl) return;
+  const filename = path.basename(imageUrl);
+  try {
+    const physicalPath = path.join(__dirname, '../uploads/products', filename);
+    await fs.unlink(physicalPath);
+    console.log(`🗑️ Fiziksel resim silindi: ${filename}`);
+  } catch (error) {
+    console.log(`⚠️ Resim silinemedi veya zaten yok: ${filename} - ${error.message}`);
+  }
+};
 
 // Tüm ürünleri listele
 export const getAllProducts = async (req, res) => {
@@ -125,6 +143,9 @@ export const updateProduct = async (req, res) => {
     }
 
     const uploadedImagePath = req.customImageUrl;
+    if (uploadedImagePath && existing.image) {
+      await deleteImageFile(existing.image);
+    }
     const imgToSave = uploadedImagePath ? uploadedImagePath : (body.image || existing.image || '');
 
     const result = await pool.query(
@@ -155,17 +176,18 @@ export const deleteProduct = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const result = await pool.query(
-      'DELETE FROM products WHERE id = $1 RETURNING id',
-      [id]
-    );
-
-    if (result.rows.length === 0) {
+    const existingRes = await pool.query('SELECT image FROM products WHERE id = $1', [id]);
+    if (existingRes.rows.length === 0) {
       return res.status(404).json({
         success: false,
         message: 'Ürün bulunamadı'
       });
     }
+    const imageToDelete = existingRes.rows[0].image;
+
+    await pool.query('DELETE FROM products WHERE id = $1', [id]);
+
+    await deleteImageFile(imageToDelete);
 
     res.json({
       success: true,

@@ -1,0 +1,157 @@
+.admin-categories-page {
+  padding: 24px;
+}
+
+.categories-error {
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fca5a5;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.categories-layout {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .categories-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.categories-add-card,
+.categories-list-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.categories-add-card h2,
+.categories-list-card h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 18px 0;
+}
+
+.categories-form {
+  display: flex;
+  gap: 10px;
+}
+
+.categories-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.categories-input:focus {
+  border-color: #6366f1;
+}
+
+.btn-add-category {
+  padding: 10px 20px;
+  background: #6366f1;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.btn-add-category:hover:not(:disabled) {
+  background: #4f46e5;
+}
+
+.btn-add-category:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.categories-hint {
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 12px;
+}
+
+.categories-hint code {
+  background: #f1f5f9;
+  padding: 2px 5px;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.categories-loading,
+.categories-empty {
+  color: #94a3b8;
+  font-size: 14px;
+  text-align: center;
+  padding: 24px 0;
+}
+
+.categories-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.categories-table th {
+  text-align: left;
+  padding: 10px 12px;
+  background: #f8fafc;
+  color: #64748b;
+  font-weight: 600;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.categories-table td {
+  padding: 12px;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+}
+
+.categories-table tr:last-child td {
+  border-bottom: none;
+}
+
+.cat-name {
+  font-weight: 500;
+}
+
+.cat-slug {
+  background: #f1f5f9;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 12px;
+  color: #475569;
+}
+
+.btn-delete-category {
+  padding: 6px 12px;
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-delete-category:hover {
+  background: #fca5a5;
+}

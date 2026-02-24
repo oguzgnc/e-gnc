@@ -46,7 +46,7 @@ function AdminProductModal({ isOpen, onClose, onSave, product }) {
         const res = await fetch(`${import.meta.env.VITE_API_URL || (import.meta.env.MODE === 'production' ? 'https://gncsarkuteri-backend.onrender.com/api' : 'http://localhost:5000/api')}/categories`);
         const data = await res.json();
         if (data && data.categories) {
-          setCategories(data.categories.map(c => ({ id: c.id || c.key, name: c.name || c.id || c.key })));
+          setCategories(data.categories.map(c => ({ id: c.slug, name: c.name })));
         }
       } catch (err) {
         console.error('Kategori yüklenemedi:', err);
@@ -146,19 +146,9 @@ function AdminProductModal({ isOpen, onClose, onSave, product }) {
                 required
               >
                 <option value="">Kategori Seçin</option>
-                {categories && categories.length > 0 ? (
-                  categories.map(c => (
-                    <option key={c.id} value={c.id}>{c.name}</option>
-                  ))
-                ) : (
-                  <>
-                    <option value="et-urunleri">Et Ürünleri</option>
-                    <option value="sut-urunleri">Süt Ürünleri</option>
-                    <option value="ev-esyalari">Ev Eşyaları</option>
-                    <option value="baharatlar">Baharatlar</option>
-                    <option value="tarla-gubreleri">Tarla Gübreleri</option>
-                  </>
-                )}
+                {categories.map(c => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
               </select>
             </div>
 
