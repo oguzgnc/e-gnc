@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
 
   // Sayfa yüklendiğinde token varsa kullanıcı bilgilerini getir
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     if (token) {
       fetchUserProfile();
     } else {
@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('Profil yüklenemedi:', error);
-      localStorage.removeItem('token');
+      sessionStorage.removeItem('token');
     } finally {
       setLoading(false);
     }
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authAPI.register({ name, email, password });
       if (response.success) {
-        localStorage.setItem('token', response.token);
+        sessionStorage.setItem('token', response.token);
         setUser(response.user);
         setIsLoggedIn(true);
         return { success: true };
@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authAPI.login({ email, password });
       if (response.success) {
-        localStorage.setItem('token', response.token);
+        sessionStorage.setItem('token', response.token);
         setUser(response.user);
         setIsLoggedIn(true);
         return { success: true };
@@ -70,7 +70,7 @@ export const AuthProvider = ({ children }) => {
 
   // Çıkış yapma fonksiyonu
   const logout = () => {
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
     localStorage.removeItem('cartItems');
     setIsLoggedIn(false);
     setUser(null);

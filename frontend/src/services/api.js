@@ -6,7 +6,7 @@ const API_URL = import.meta.env.VITE_API_URL ||
 
 // Helper function for API calls
 const apiCall = async (endpoint, options = {}) => {
-  const token = localStorage.getItem('token');
+  const token = sessionStorage.getItem('token');
 
   // Build headers: if options.body is a FormData, DO NOT set Content-Type so browser can add boundary
   const headers = (options && options.headers) || {};
@@ -98,7 +98,7 @@ export const productAPI = {
   },
 
   createProduct: async (productData) => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     const url = `${API_URL}/products`;
     const headers = {};
     if (token) headers['Authorization'] = `Bearer ${token}`;
@@ -112,7 +112,7 @@ export const productAPI = {
   },
 
   updateProduct: async (productId, productData) => {
-    const token = localStorage.getItem('token');
+    const token = sessionStorage.getItem('token');
     const url = `${API_URL}/products/${productId}`;
     const headers = {};
     if (token) headers['Authorization'] = `Bearer ${token}`;
