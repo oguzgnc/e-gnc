@@ -59,7 +59,16 @@ function AdminPanel() {
       console.log('Products Response:', productsRes);
       console.log('Messages Response:', messagesRes);
 
-      if (statsRes.success) setStats(statsRes.stats);
+      if (statsRes.success) {
+        const nextStats = {
+          ...statsRes.stats,
+          totalProducts: productsRes?.success ? (productsRes.products || []).length : (statsRes.stats?.totalProducts || 0),
+          lowStockProducts: productsRes?.success
+            ? (productsRes.products || []).filter(product => product.in_stock === false).length
+            : (statsRes.stats?.lowStockProducts || 0)
+        };
+        setStats(nextStats);
+      }
       if (usersRes.success) setUsers(usersRes.users);
       if (ordersRes.success) setOrders(ordersRes.orders);
       if (productsRes.success) setProducts(productsRes.products);
@@ -270,7 +279,7 @@ function AdminPanel() {
         <AdminNavbar />
         
         <div className="admin-content">
-          {activeTab === 'dashboard' && <AdminDashboard stats={stats} />}
+          {activeTab === 'dashboard' && <AdminDashboard stats={stats} products={products} />}
           
           {activeTab === 'users' && (
             <AdminUsersPage

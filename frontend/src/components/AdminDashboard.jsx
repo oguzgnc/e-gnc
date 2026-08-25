@@ -28,38 +28,39 @@ ChartJS.register(
   Legend
 );
 
-function AdminDashboard({ stats }) {
-  const statsCards = [
-    {
-      icon: '👥',
-      title: 'Toplam Kullanıcı',
-      value: stats?.totalUsers || 0,
-      bgColor: '#4CAF50'
-    },
-    {
-      icon: '📦',
-      title: 'Toplam Sipariş',
-      value: stats?.totalOrders || 0,
-      bgColor: '#2196F3'
-    },
-    {
-      icon: '💰',
-      title: 'Toplam Gelir',
-      value: `${(stats?.totalRevenue || 0).toFixed(2)} ₺`,
-      bgColor: '#FF6F00'
-    },
-    {
-      icon: '⏳',
-      title: 'Bekleyen Sipariş',
-      value: stats?.pendingOrders || 0,
-      bgColor: '#FFC107'
-    }
-  ];
-
-  // Gerçek verilere dayalı grafik verileri
+function AdminDashboard({ stats, products = [] }) {
   const totalOrders = stats?.totalOrders || 0;
   const pendingOrders = stats?.pendingOrders || 0;
   const totalRevenue = stats?.totalRevenue || 0;
+  const totalProducts = stats?.totalProducts ?? products.length;
+  const lowStockProducts = stats?.lowStockProducts ?? products.filter(product => product.in_stock === false).length;
+
+  const statsCards = [
+    {
+      icon: '📦',
+      title: 'Toplam Sipariş',
+      value: totalOrders,
+      bgColor: '#2196F3'
+    },
+    {
+      icon: '⏳',
+      title: 'Bekleyen Siparişler',
+      value: pendingOrders,
+      bgColor: '#FFC107'
+    },
+    {
+      icon: '🛍️',
+      title: 'Toplam Ürün',
+      value: totalProducts,
+      bgColor: '#4CAF50'
+    },
+    {
+      icon: '⚠️',
+      title: 'Düşük Stoklu Ürünler',
+      value: lowStockProducts,
+      bgColor: '#F44336'
+    }
+  ];
 
   // Gelir trendi - son 6 ay (örnek veri, isterseniz backend'den alınabilir)
   const avgMonthlyRevenue = totalRevenue / 6;

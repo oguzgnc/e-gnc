@@ -23,10 +23,11 @@
 
 /* Table Container */
 .table-container {
-  background: #ffffff;
-  border-radius: 12px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 18px;
   padding: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
   overflow-x: auto;
 }
 
@@ -36,25 +37,27 @@
 }
 
 .admin-table thead {
-  background: #F5F5F5;
+  background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
 }
 
 .admin-table th {
   padding: 16px;
   text-align: left;
-  font-size: 14px;
-  font-weight: 600;
-  color: #212121;
-  border-bottom: 2px solid #e5e5e5;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #475569;
+  border-bottom: 2px solid #e2e8f0;
 }
 
 .admin-table tbody tr {
-  border-bottom: 1px solid #e5e5e5;
-  transition: all 0.2s ease;
+  border-bottom: 1px solid #e2e8f0;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .admin-table tbody tr:hover {
-  background: #F9F9F9;
+  background: rgba(148, 163, 184, 0.05);
 }
 
 .admin-table td {
@@ -89,56 +92,81 @@
   color: #757575;
 }
 
+.status-cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  min-width: 220px;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 130px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  border: 1px solid transparent;
+  text-align: center;
+  flex-shrink: 0;
+}
+
 /* Status Select */
 .status-select {
+  min-width: 130px;
+  width: 130px;
   padding: 6px 12px;
-  border: 2px solid;
+  border: 1px solid #d1d5db;
   border-radius: 6px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
-  appearance: none;
-  background-repeat: no-repeat;
-  background-position: right 8px center;
-  background-size: 12px;
-  padding-right: 28px;
+  background: #fff;
+  text-align: center;
+  flex-shrink: 0;
 }
 
 .status-select:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
 }
 
 /* Status Colors */
 .badge-pending {
   background: #FFF8E1;
-  color: #F57F17;
-  border-color: #FBC02D;
+  color: #B45309;
+  border-color: #FCD34D;
 }
 
 .badge-processing {
-  background: #E3F2FD;
-  color: #1565C0;
-  border-color: #42A5F5;
+  background: #E0F2FE;
+  color: #0369A1;
+  border-color: #7DD3FC;
 }
 
 .badge-shipped {
-  background: #FFF3E0;
-  color: #E65100;
-  border-color: #FF9800;
+  background: #DBEAFE;
+  color: #1D4ED8;
+  border-color: #93C5FD;
 }
 
 .badge-delivered {
-  background: #E8F5E9;
-  color: #2E7D32;
-  border-color: #66BB6A;
+  background: #DCFCE7;
+  color: #15803D;
+  border-color: #86EFAC;
 }
 
 .badge-cancelled {
-  background: #FFEBEE;
-  color: #C62828;
-  border-color: #EF5350;
+  background: #FEE2E2;
+  color: #B91C1C;
+  border-color: #FCA5A5;
 }
 
 /* Empty State */
@@ -235,16 +263,16 @@
   color: white;
   border: none;
   padding: 8px 16px;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
 }
 
 .btn-toggle-details:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 121, 107, 0.3);
+  box-shadow: 0 8px 16px rgba(0, 121, 107, 0.22);
 }
 
 .order-row {
@@ -253,34 +281,43 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .table-container {
+    padding: 12px;
+  }
+
   .order-item {
     grid-template-columns: 1fr;
     gap: 8px;
   }
 
-  .item-price {
-    text-align: left;
+  .status-cell {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 520px) {
+  .page-header {
+    margin-bottom: 20px;
+  }
+
+  .page-title {
+    font-size: 24px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 12px 10px;
+    font-size: 12px;
   }
 
   .btn-toggle-details {
+    width: 100%;
     font-size: 11px;
     padding: 6px 12px;
   }
 
   .table-container {
     padding: 16px;
-  }
-
-  .admin-table {
-    font-size: 12px;
-  }
-
-  .admin-table th,
-  .admin-table td {
-    padding: 12px 8px;
-  }
-
-  .page-title {
-    font-size: 24px;
   }
 }

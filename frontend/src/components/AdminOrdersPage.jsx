@@ -28,7 +28,7 @@ function AdminOrdersPage({ orders, onStatusChange }) {
       pending: 'Beklemede',
       processing: 'İşleniyor',
       shipped: 'Kargoya Verildi',
-      delivered: 'Teslim Edildi',
+      delivered: 'Tamamlandı',
       cancelled: 'İptal Edildi'
     };
     return labels[status] || status;
@@ -66,17 +66,23 @@ function AdminOrdersPage({ orders, onStatusChange }) {
                       {parseFloat(order.total_price).toFixed(2)} ₺
                     </td>
                     <td className="td-status">
-                      <select
-                        className={`status-select ${getStatusBadgeClass(order.status)}`}
-                        value={order.status}
-                        onChange={(e) => onStatusChange(order.id, e.target.value)}
-                      >
-                        <option value="pending">Beklemede</option>
-                        <option value="processing">İşleniyor</option>
-                        <option value="shipped">Kargoya Verildi</option>
-                        <option value="delivered">Teslim Edildi</option>
-                        <option value="cancelled">İptal Edildi</option>
-                      </select>
+                      <div className="status-cell">
+                        <span className={`status-badge ${getStatusBadgeClass(order.status)}`}>
+                          {getStatusLabel(order.status)}
+                        </span>
+                        <select
+                          className="status-select"
+                          value={order.status}
+                          onChange={(e) => onStatusChange(order.id, e.target.value)}
+                          aria-label="Sipariş durumunu değiştir"
+                        >
+                          <option value="pending">Beklemede</option>
+                          <option value="processing">İşleniyor</option>
+                          <option value="shipped">Kargoya Verildi</option>
+                          <option value="delivered">Tamamlandı</option>
+                          <option value="cancelled">İptal Edildi</option>
+                        </select>
+                      </div>
                     </td>
                     <td className="td-date">
                       {new Date(order.created_at).toLocaleDateString('tr-TR')}
