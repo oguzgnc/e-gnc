@@ -1,5 +1,7 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 import initDatabase from './config/initDatabase.js';
 import authRoutes from './routes/authRoutes.js';
@@ -22,9 +24,25 @@ const PORT = process.env.PORT || 5000;
 // - In development run by default
 // - In production skip unless FORCE_DB_INIT=true
 const SHOULD_INIT_DB = process.env.FORCE_DB_INIT === 'true' || process.env.NODE_ENV !== 'production';
+const allowedOrigin = process.env.NODE_ENV === 'production'
+  ? 'https://gnchol.com'
+  : 'http://localhost:5173';
+
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: 'Çok fazla istek gönderildi. Lütfen 15 dakika sonra tekrar deneyin.'
+  }
+});
 
 // Middleware
-app.use(cors());
+app.use(helmet());
+app.use(cors({ origin: allowedOrigin }));
+app.use(apiLimiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
