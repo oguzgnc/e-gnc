@@ -1,6 +1,7 @@
 // src/App.jsx
 
 import React, { useState, useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
 import './App.css'; // Ana uygulama stilleri
 import Navbar from './components/Navbar'; 
 import { Link } from 'react-router-dom'; // Link bileşenini import ediyoruz
@@ -41,6 +42,7 @@ function App() {
 
   return (
     <div className="App">
+      <Toaster position="bottom-right" />
       <Navbar /> 
       <HeroSection /> 
 

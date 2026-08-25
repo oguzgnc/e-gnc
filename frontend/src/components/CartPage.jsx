@@ -1,6 +1,7 @@
 // src/components/CartPage.jsx
 
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import { useCart } from '../context/CartContext'; // Sepet Context'ini kullanmak için
 import { useAuth } from '../context/AuthContext'; // Auth Context'ini kullanmak için
 import { orderAPI } from '../services/api'; // Order API
@@ -78,7 +79,7 @@ function CartPage() {
 
   const handleCheckout = async () => {
     if (!isTermsAccepted) {
-      alert('Lütfen siparişi tamamlamak için sözleşmeleri onaylayın');
+      toast.error('Lütfen siparişi tamamlamak için sözleşmeleri onaylayın');
       return;
     }
 
@@ -103,14 +104,16 @@ function CartPage() {
       const response = await orderAPI.createOrder(orderData);
 
       if (response.success) {
-        alert('🎉 Siparişiniz başarıyla oluşturuldu! En kısa sürede tarafınıza ulaşacaktır.');
+        toast.success('🎉 Siparişiniz başarıyla oluşturuldu! En kısa sürede tarafınıza ulaşacaktır.');
         clearCart();
         setShowCheckoutModal(false);
         navigate('/');
       }
     } catch (error) {
       console.error('Sipariş oluşturma hatası:', error);
-      setError(error.message || 'Sipariş oluşturulurken bir hata oluştu');
+      const message = error.message || 'Sipariş oluşturulurken bir hata oluştu';
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
