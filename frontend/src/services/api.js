@@ -102,13 +102,16 @@ export const productAPI = {
     const url = `${API_URL}/products`;
     const headers = {};
     if (token) headers['Authorization'] = `Bearer ${token}`;
+    const isFormData = productData instanceof FormData;
+    if (!isFormData) headers['Content-Type'] = 'application/json';
     const response = await fetch(url, {
       method: 'POST',
       headers,
-      body: productData, // productData should be FormData
+      body: isFormData ? productData : JSON.stringify(productData),
     });
-    if (!response.ok) throw new Error('Oluşturma başarısız');
-    return response.json();
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message || 'Oluşturma başarısız');
+    return data;
   },
 
   updateProduct: async (productId, productData) => {
@@ -116,13 +119,16 @@ export const productAPI = {
     const url = `${API_URL}/products/${productId}`;
     const headers = {};
     if (token) headers['Authorization'] = `Bearer ${token}`;
+    const isFormData = productData instanceof FormData;
+    if (!isFormData) headers['Content-Type'] = 'application/json';
     const response = await fetch(url, {
       method: 'PUT',
       headers,
-      body: productData, // productData should be FormData
+      body: isFormData ? productData : JSON.stringify(productData),
     });
-    if (!response.ok) throw new Error('Güncelleme başarısız');
-    return response.json();
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message || 'Güncelleme başarısız');
+    return data;
   },
 
   deleteProduct: async (productId) => {

@@ -102,7 +102,7 @@ const initDatabase = async () => {
       WHERE slug IS NULL OR slug = ''
     `);
 
-    // Varsayılan kategorileri ekle (yoksa) — key sütunu da doldur
+    // Varsayılan kategorileri ekle (yoksa) — `slug` kullanılarak
     const defaultCategories = [
       { name: 'Et Ürünleri',     slug: 'et-urunleri' },
       { name: 'Süt Ürünleri',    slug: 'sut-urunleri' },
@@ -112,9 +112,9 @@ const initDatabase = async () => {
     ];
     for (const cat of defaultCategories) {
       await pool.query(
-        `INSERT INTO categories (key, name, slug) VALUES ($1, $2, $1)
-         ON CONFLICT (key) DO UPDATE SET slug = EXCLUDED.slug`,
-        [cat.slug, cat.name]
+        `INSERT INTO categories (name, slug) VALUES ($1, $2)
+         ON CONFLICT (slug) DO UPDATE SET name = EXCLUDED.name`,
+        [cat.name, cat.slug]
       );
     }
 

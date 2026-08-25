@@ -12,27 +12,27 @@ import pool from './config/database.js';
 const categories = [
   { id: 'et-urunleri', name: 'Et Ürünleri' },
   { id: 'sut-urunleri', name: 'Süt Ürünleri' },
-  { id: 'tarla-gubr', name: 'Tarla Gübreleri' },
+  { id: 'tarla-gubreleri', name: 'Tarla Gübreleri' },
   { id: 'baharatlar', name: 'Baharatlar' },
   { id: 'ev-esyalari', name: 'Ev Eşyaları' }
 ];
 
 const run = async () => {
   try {
-    // Create categories table if not exists
+    // Keep this schema aligned with initDatabase.js and categoryController.js.
     await pool.query(`
       CREATE TABLE IF NOT EXISTS categories (
         id SERIAL PRIMARY KEY,
-        key VARCHAR(100) UNIQUE NOT NULL,
-        name VARCHAR(255) NOT NULL
+        name VARCHAR(255) NOT NULL,
+        slug VARCHAR(255) UNIQUE NOT NULL
       )
     `);
 
     // Upsert categories
     for (const c of categories) {
       await pool.query(
-        `INSERT INTO categories (key, name) VALUES ($1, $2) ON CONFLICT (key) DO UPDATE SET name = EXCLUDED.name`,
-        [c.id, c.name]
+        `INSERT INTO categories (name, slug) VALUES ($1, $2) ON CONFLICT (slug) DO UPDATE SET name = EXCLUDED.name`,
+        [c.name, c.id]
       );
     }
 

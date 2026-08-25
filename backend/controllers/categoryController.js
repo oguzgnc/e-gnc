@@ -16,7 +16,7 @@ const toSlug = (name) =>
 export const getCategories = async (req, res, next) => {
   try {
     const result = await pool.query(
-      'SELECT id, name, COALESCE(slug, key) AS slug FROM categories ORDER BY id'
+      'SELECT id, name, slug FROM categories ORDER BY id'
     );
     return res.json({ success: true, categories: result.rows });
   } catch (err) {
@@ -32,8 +32,8 @@ export const createCategory = async (req, res, next) => {
   const slug = toSlug(name);
   try {
     const result = await pool.query(
-      'INSERT INTO categories (key, name, slug) VALUES ($1, $2, $1) RETURNING id, name, slug',
-      [slug, name.trim()]
+      'INSERT INTO categories (name, slug) VALUES ($1, $2) RETURNING id, name, slug',
+      [name.trim(), slug]
     );
     return res.status(201).json({ success: true, category: result.rows[0] });
   } catch (err) {

@@ -1,6 +1,7 @@
 // src/components/AdminProductModal.jsx
 import React, { useState, useEffect } from 'react';
 import './AdminProductModal.css';
+import { categoryAPI } from '../services/api';
 
 function AdminProductModal({ isOpen, onClose, onSave, product }) {
   const imgBaseUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace(/\/api$/, '') : 'http://localhost:5000';
@@ -43,13 +44,14 @@ function AdminProductModal({ isOpen, onClose, onSave, product }) {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL || (import.meta.env.MODE === 'production' ? 'https://gncsarkuteri-backend.onrender.com/api' : 'http://localhost:5000/api')}/categories`);
-        const data = await res.json();
-        if (data && data.categories) {
-          setCategories(data.categories.map(c => ({ id: c.slug, name: c.name })));
-        }
+        const data = await categoryAPI.getCategories();
+        setCategories((data.categories || []).map(c => ({
+          id: c.slug || c.key || String(c.id),
+          name: c.name
+        })));
       } catch (err) {
         console.error('Kategori yüklenemedi:', err);
+        setCategories([]);
       }
     };
     if (isOpen) fetchCategories();
