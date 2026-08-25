@@ -25,6 +25,7 @@ function CartPage() {
     orderNote: ''
   });
   const [formErrors, setFormErrors] = useState({});
+  const [legalConsent, setLegalConsent] = useState(false);
 
   const handleCheckoutClick = () => {
     // Kullanıcı bilgilerini önceden doldur (giriş yaptıysa)
@@ -37,6 +38,7 @@ function CartPage() {
     }
     
     setShowCheckoutModal(true);
+    setLegalConsent(false);
   };
 
   const handleFormChange = (e) => {
@@ -76,6 +78,11 @@ function CartPage() {
 
   const handleCheckout = async () => {
     if (!validateForm()) {
+      return;
+    }
+
+    if (!legalConsent) {
+      setError('Devam etmek için hukuki metinleri okuyup onaylamanız gerekir.');
       return;
     }
 
@@ -265,6 +272,22 @@ function CartPage() {
               </div>
 
               {error && <div className="error-message">{error}</div>}
+
+              <label className="legal-consent">
+                <input
+                  type="checkbox"
+                  checked={legalConsent}
+                  onChange={(e) => {
+                    setLegalConsent(e.target.checked);
+                    if (e.target.checked) setError('');
+                  }}
+                  required
+                />
+                <span>
+                  <a href="/mesafeli-satis-sozlesmesi" target="_blank" rel="noreferrer">Ön Bilgilendirme Formu</a>{' '}
+                  ve <a href="/mesafeli-satis-sozlesmesi" target="_blank" rel="noreferrer">Mesafeli Satış Sözleşmesi</a>ni okudum, onaylıyorum.
+                </span>
+              </label>
             </div>
 
             <div className="modal-footer">
@@ -278,7 +301,7 @@ function CartPage() {
               <button 
                 className="btn-submit" 
                 onClick={handleCheckout}
-                disabled={loading}
+                disabled={loading || !legalConsent}
               >
                 {loading ? 'İşleniyor...' : '✓ Siparişi Onayla'}
               </button>

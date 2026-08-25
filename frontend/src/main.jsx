@@ -13,6 +13,10 @@ import CategoryPage from './components/CategoryPage.jsx';
 import AboutUsPage from './components/AboutUsPage.jsx'; // AboutUsPage bileşenini import ediyoruz
 import AdminPanel from './components/AdminPanel.jsx'; // AdminPanel'i import ediyoruz
 import MyOrdersPage from './components/MyOrdersPage.jsx'; // MyOrdersPage'i import ediyoruz
+import CookieBanner from './components/CookieBanner.jsx';
+import KVKKPage from './components/KVKKPage.jsx';
+import DistanceSellingContract from './components/DistanceSellingContract.jsx';
+import ReturnPolicyPage from './components/ReturnPolicyPage.jsx';
 
 import { CartProvider } from './context/CartContext.jsx'; 
 import { AuthProvider } from './context/AuthContext.jsx';
@@ -73,6 +77,18 @@ const router = createBrowserRouter([
     path: "/auth", // Alternatif giriş yolu
     element: <AuthPage />,
   },
+  {
+    path: "/kvkk",
+    element: <KVKKPage />,
+  },
+  {
+    path: "/mesafeli-satis-sozlesmesi",
+    element: <DistanceSellingContract />,
+  },
+  {
+    path: "/iade-ve-cayma",
+    element: <ReturnPolicyPage />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -83,7 +99,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <CartProvider>
         {/* Uygulamayı RouterProvider ile sarmalıyoruz ki sayfa yönlendirmeleri çalışsın */}
         <RouterProvider router={router} />
+        <CookieBanner />
       </CartProvider>
     </AuthProvider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );

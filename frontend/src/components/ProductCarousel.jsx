@@ -1,6 +1,6 @@
 // src/components/ProductCarousel.jsx
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaAngleRight, FaAngleLeft } from 'react-icons/fa'; 
 import './ProductCarousel.css'; 
 import { useCart } from '../context/CartContext';
@@ -8,13 +8,24 @@ import { useCart } from '../context/CartContext';
 function ProductCarousel({ title, products }) {
   const imgBaseUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace(/\/api$/, '') : 'http://localhost:5000';
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isReady, setIsReady] = useState(false);
   const { addToCart } = useCart();
 
+  useEffect(() => {
+    setCurrentIndex((index) => (products.length > 0 ? index % products.length : 0));
+    setIsReady(false);
+
+    const frameId = requestAnimationFrame(() => setIsReady(true));
+    return () => cancelAnimationFrame(frameId);
+  }, [products.length]);
+
   const handleNext = () => {
+    if (products.length < 2) return;
     setCurrentIndex((prevIndex) => (prevIndex + 1) % products.length);
   };
 
   const handlePrev = () => {
+    if (products.length < 2) return;
     setCurrentIndex((prevIndex) => (prevIndex - 1 + products.length) % products.length);
   };
 
@@ -64,7 +75,7 @@ function ProductCarousel({ title, products }) {
         <button className="product-carousel-nav-btn left" onClick={handlePrev}>
           <FaAngleLeft />
         </button>
-        <div className="product-carousel-3d">
+        <div className={`product-carousel-3d${isReady ? ' carousel-ready' : ''}`}>
           {products.map((product, index) => {
             let parsedOptions = [];
             try {

@@ -226,6 +226,30 @@
   border-left: 4px solid #c62828;
 }
 
+.legal-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 18px 0 4px;
+  color: #4f5f5c;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.legal-consent input {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  flex: 0 0 auto;
+  accent-color: #00796b;
+}
+
+.legal-consent a {
+  color: #00796b;
+  font-weight: 600;
+}
+
 .checkout-button {
   background-color: #00796b; /* Ana Vurgu Rengi */
   color: white;
