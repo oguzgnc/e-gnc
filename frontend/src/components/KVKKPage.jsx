@@ -7,7 +7,7 @@ function KVKKPage() {
     <>
       <Navbar />
       <main className="legal-page">
-        <h1>KVKK Aydınlatma Metni</h1>
+        <h1>GNChol KVKK Aydınlatma Metni</h1>
         <section>
           <h2>Taslak metin</h2>
           <p>

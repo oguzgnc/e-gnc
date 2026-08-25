@@ -7,7 +7,7 @@ function ReturnPolicyPage() {
     <>
       <Navbar />
       <main className="legal-page">
-        <h1>İade ve Cayma Koşulları</h1>
+        <h1>GNChol İade ve İptal Koşulları</h1>
         <section>
           <h2>Taslak metin</h2>
           <p>Bu alan, iade ve cayma sürecine ilişkin işletmenize özel güncel politika ile doldurulmalıdır.</p>

@@ -89,6 +89,10 @@ const router = createBrowserRouter([
     path: "/iade-ve-cayma",
     element: <ReturnPolicyPage />,
   },
+  {
+    path: "/iade-kosullari",
+    element: <ReturnPolicyPage />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(

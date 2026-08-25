@@ -5,7 +5,7 @@ import { useCart } from '../context/CartContext'; // Sepet Context'ini kullanmak
 import { useAuth } from '../context/AuthContext'; // Auth Context'ini kullanmak için
 import { orderAPI } from '../services/api'; // Order API
 import './CartPage.css'; // Stil dosyası
-import { useNavigate } from 'react-router-dom'; // Yönlendirme için
+import { Link, useNavigate } from 'react-router-dom'; // Yönlendirme için
 const imgBaseUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace(/\/api$/, '') : 'http://localhost:5000';
 
 function CartPage() {
@@ -25,7 +25,7 @@ function CartPage() {
     orderNote: ''
   });
   const [formErrors, setFormErrors] = useState({});
-  const [legalConsent, setLegalConsent] = useState(false);
+  const [isTermsAccepted, setIsTermsAccepted] = useState(false);
 
   const handleCheckoutClick = () => {
     // Kullanıcı bilgilerini önceden doldur (giriş yaptıysa)
@@ -38,7 +38,7 @@ function CartPage() {
     }
     
     setShowCheckoutModal(true);
-    setLegalConsent(false);
+    setIsTermsAccepted(false);
   };
 
   const handleFormChange = (e) => {
@@ -77,12 +77,12 @@ function CartPage() {
   };
 
   const handleCheckout = async () => {
-    if (!validateForm()) {
+    if (!isTermsAccepted) {
+      alert('Lütfen siparişi tamamlamak için sözleşmeleri onaylayın');
       return;
     }
 
-    if (!legalConsent) {
-      setError('Devam etmek için hukuki metinleri okuyup onaylamanız gerekir.');
+    if (!validateForm()) {
       return;
     }
 
@@ -276,16 +276,15 @@ function CartPage() {
               <label className="legal-consent">
                 <input
                   type="checkbox"
-                  checked={legalConsent}
+                  checked={isTermsAccepted}
                   onChange={(e) => {
-                    setLegalConsent(e.target.checked);
-                    if (e.target.checked) setError('');
+                    setIsTermsAccepted(e.target.checked);
                   }}
                   required
                 />
                 <span>
-                  <a href="/mesafeli-satis-sozlesmesi" target="_blank" rel="noreferrer">Ön Bilgilendirme Formu</a>{' '}
-                  ve <a href="/mesafeli-satis-sozlesmesi" target="_blank" rel="noreferrer">Mesafeli Satış Sözleşmesi</a>ni okudum, onaylıyorum.
+                  <Link to="/mesafeli-satis-sozlesmesi" target="_blank" rel="noreferrer">Ön Bilgilendirme Formu</Link>{' '}
+                  ve <Link to="/mesafeli-satis-sozlesmesi" target="_blank" rel="noreferrer">Mesafeli Satış Sözleşmesi</Link>ni okudum ve onaylıyorum.
                 </span>
               </label>
             </div>
@@ -301,7 +300,7 @@ function CartPage() {
               <button 
                 className="btn-submit" 
                 onClick={handleCheckout}
-                disabled={loading || !legalConsent}
+                disabled={loading || !isTermsAccepted}
               >
                 {loading ? 'İşleniyor...' : '✓ Siparişi Onayla'}
               </button>

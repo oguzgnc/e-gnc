@@ -71,6 +71,11 @@ function App() {
       {/* Alt bilgi (Footer) */}
       <footer className="footer">
         <p>&copy; {new Date().getFullYear()} gncsarküteri. Tüm Hakları Saklıdır.</p>
+        <nav className="footer-legal-links" aria-label="Yasal bağlantılar">
+          <Link to="/kvkk">KVKK Aydınlatma Metni</Link>
+          <Link to="/mesafeli-satis-sozlesmesi">Mesafeli Satış Sözleşmesi</Link>
+          <Link to="/iade-kosullari">İade ve İptal Koşulları</Link>
+        </nav>
       </footer>
     </div>
   );
