@@ -11,6 +11,7 @@ import setupRoutes from './routes/setupRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
+import recipeRoutes from './routes/recipeRoutes.js';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
@@ -72,6 +73,7 @@ app.use('/api/setup', setupRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/recipes', recipeRoutes);
 
 // Serve uploads statically (duplicate removed above)
 

@@ -152,6 +152,17 @@ export const categoryAPI = {
   },
 };
 
+// Recipe API
+export const recipeAPI = {
+  getAllRecipes: async () => {
+    return apiCall('/recipes');
+  },
+
+  getRecipeById: async (recipeId) => {
+    return apiCall(`/recipes/${recipeId}`);
+  },
+};
+
 // Order API
 export const orderAPI = {
   createOrder: async (orderData) => {

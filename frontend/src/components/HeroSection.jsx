@@ -1,8 +1,12 @@
 // src/components/HeroSection.jsx
 
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { FaCheese, FaDrumstickBite, FaSeedling, FaLeaf, FaHome } from 'react-icons/fa';
+import { MousePointerClick } from 'lucide-react';
+import antrikotImg from '../assets/antrikot.webp';
+import mantiImg from '../assets/mantı1.webp';
+import kiymaImg from '../assets/kıyma.webp';
 import './HeroSection.css';
 
 // Kategori ikonlarını döndüren yardımcı fonksiyon
@@ -105,6 +109,23 @@ function HeroSection() {
         <button className="carousel-nav-btn right-btn" onClick={handleNext}>
           ❯
         </button>
+
+        <Link to="/tarifler" className="recipe-promo-card">
+          <span className="recipe-promo-eyebrow">👨‍🍳 Şefin Önerisi</span>
+          <div className="recipe-promo-content">
+            <h2>Bugün Ne Pişirsem?</h2>
+            <p>Harika tarifler ve tüm malzemeler tek tıkla sepetinde.</p>
+          </div>
+          <div className="recipe-promo-gallery" aria-hidden="true">
+            <img src={antrikotImg} className="object-cover w-full h-full" alt="" />
+            <img src={mantiImg} className="object-cover w-full h-full" alt="" />
+            <img src={kiymaImg} className="object-cover w-full h-full" alt="" />
+          </div>
+          <span className="recipe-promo-cta">
+            <MousePointerClick className="recipe-discovery-icon" size={20} aria-hidden="true" />
+            Tarifleri Keşfet
+          </span>
+        </Link>
       </div>
       
       <div className="carousel-dots">

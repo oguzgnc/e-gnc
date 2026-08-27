@@ -2,6 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { Toaster } from 'react-hot-toast';
 import App from './App.jsx';
 import ProductDetailPage from './components/ProductDetailPage.jsx';
 import AuthPage from './components/AuthPage.jsx';
@@ -17,6 +18,8 @@ import CookieBanner from './components/CookieBanner.jsx';
 import KVKKPage from './components/KVKKPage.jsx';
 import DistanceSellingContract from './components/DistanceSellingContract.jsx';
 import ReturnPolicyPage from './components/ReturnPolicyPage.jsx';
+import RecipesPage from './components/RecipesPage.jsx';
+import RecipeDetailPage from './components/RecipeDetailPage.jsx';
 
 import { CartProvider } from './context/CartContext.jsx'; 
 import { AuthProvider } from './context/AuthContext.jsx';
@@ -44,6 +47,14 @@ const router = createBrowserRouter([
   {
     path: "/cart", // Sepet sayfası yolu
     element: <CartPage />, // Sepet sayfası için CartPage bileşenini göster
+  },
+  {
+    path: "/tarifler",
+    element: <RecipesPage />,
+  },
+  {
+    path: "/tarifler/:id",
+    element: <RecipeDetailPage />,
   },
   {
     path: "/categories/:categoryId", // Kategori detay sayfası yolu
@@ -103,6 +114,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <CartProvider>
         {/* Uygulamayı RouterProvider ile sarmalıyoruz ki sayfa yönlendirmeleri çalışsın */}
         <RouterProvider router={router} />
+        <Toaster position="bottom-right" />
         <CookieBanner />
       </CartProvider>
     </AuthProvider>
