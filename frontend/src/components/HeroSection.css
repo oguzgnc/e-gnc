@@ -108,7 +108,7 @@
   box-shadow: 0 7px 14px rgba(2, 44, 34, 0.24);
 }
 
-.recipe-promo-gallery img + img {
+.recipe-promo-gallery img+img {
   margin-left: -14px;
 }
 
@@ -131,9 +131,12 @@
 }
 
 @keyframes recipePointerSlide {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateX(0);
   }
+
   50% {
     transform: translateX(6px);
   }
@@ -291,34 +294,34 @@
   .carousel-3d-container {
     gap: 60px;
   }
-  
+
   .carousel-3d {
     width: 300px;
     height: 380px;
   }
-  
+
   .category-card-3d {
     width: 260px;
     height: 320px;
     padding: 40px 30px;
   }
-  
+
   .category-card-3d.card-right {
     transform: translateX(220px) translateZ(-150px) rotateY(-35deg) scale(0.75);
   }
-  
+
   .category-card-3d.card-left {
     transform: translateX(-220px) translateZ(-150px) rotateY(35deg) scale(0.75);
   }
-  
+
   .hero-category-icon {
     font-size: 4em;
   }
-  
+
   .category-name-3d {
     font-size: 1.5em;
   }
-  
+
   .carousel-nav-btn {
     width: 50px;
     height: 50px;
@@ -347,37 +350,37 @@
     padding: 40px 10px;
     overflow: hidden;
   }
-  
+
   .carousel-3d-container {
     gap: 20px;
     padding: 0 10px;
   }
-  
+
   .carousel-3d {
     width: 280px;
     height: 350px;
   }
-  
+
   .category-card-3d {
     width: 250px;
     height: 320px;
     padding: 30px 20px;
   }
-  
+
   /* Yan kartları gizle */
   .category-card-3d.card-right,
   .category-card-3d.card-left {
     display: none;
   }
-  
+
   .hero-category-icon {
     font-size: 3.5em;
   }
-  
+
   .category-name-3d {
     font-size: 1.3em;
   }
-  
+
   .carousel-nav-btn {
     width: 45px;
     height: 45px;
@@ -407,43 +410,42 @@
   .hero-categories-only {
     padding: 30px 5px;
   }
-  
+
   .carousel-3d-container {
     gap: 15px;
   }
-  
+
   .carousel-3d {
     width: 240px;
     height: 300px;
   }
-  
+
   .category-card-3d {
     width: 220px;
     height: 280px;
     padding: 25px 15px;
   }
-  
+
   .category-card-3d.card-right,
   .category-card-3d.card-left {
     display: none;
   }
-  
+
   .hero-category-icon {
     font-size: 3em;
   }
-  
+
   .category-name-3d {
     font-size: 1.2em;
   }
-  
+
   .carousel-nav-btn {
     width: 40px;
     height: 40px;
     font-size: 1.2em;
   }
-  
+
   .carousel-dots {
     margin-top: 25px;
   }
 }
-

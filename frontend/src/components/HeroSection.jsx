@@ -29,11 +29,11 @@ const getCategoryIcon = (categoryId) => {
 
 
 const DEFAULT_CATEGORIES = [
-  { slug: 'sut-urunleri',    name: 'Süt Ürünleri' },
-  { slug: 'et-urunleri',     name: 'Et Ürünleri' },
+  { slug: 'sut-urunleri', name: 'Süt Ürünleri' },
+  { slug: 'et-urunleri', name: 'Et Ürünleri' },
   { slug: 'tarla-gubreleri', name: 'Tarla Gübreleri' },
-  { slug: 'baharatlar',      name: 'Baharatlar' },
-  { slug: 'ev-esyalari',     name: 'Ev Eşyaları' }
+  { slug: 'baharatlar', name: 'Baharatlar' },
+  { slug: 'ev-esyalari', name: 'Ev Eşyaları' }
 ];
 
 function HeroSection() {
@@ -61,14 +61,14 @@ function HeroSection() {
   };
 
   const handlePrev = () => {
-    setCurrentIndex((prevIndex) => 
+    setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? allCategories.length - 1 : prevIndex - 1
     );
   };
 
   const getCardClass = (index) => {
     const diff = (index - currentIndex + allCategories.length) % allCategories.length;
-    
+
     if (diff === 0) return 'card-active'; // En önde
     if (diff === 1) return 'card-right'; // Sağda
     if (diff === allCategories.length - 1) return 'card-left'; // Solda
@@ -81,12 +81,12 @@ function HeroSection() {
         <button className="carousel-nav-btn left-btn" onClick={handlePrev}>
           ❮
         </button>
-        
+
         <div className="carousel-3d">
           {allCategories.map((category, index) => (
-            <NavLink 
-              key={category.slug} 
-              to={`/categories/${category.slug}`} 
+            <NavLink
+              key={category.slug}
+              to={`/categories/${category.slug}`}
               className={`category-card-3d ${getCardClass(index)}`}
               onClick={(e) => {
                 if (getCardClass(index) !== 'card-active') {
@@ -105,7 +105,7 @@ function HeroSection() {
             </NavLink>
           ))}
         </div>
-        
+
         <button className="carousel-nav-btn right-btn" onClick={handleNext}>
           ❯
         </button>
@@ -127,7 +127,7 @@ function HeroSection() {
           </span>
         </Link>
       </div>
-      
+
       <div className="carousel-dots">
         {allCategories.map((category, index) => (
           <button
