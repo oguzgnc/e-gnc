@@ -1,5 +1,6 @@
 // src/components/AdminSidebar.jsx
 import React from 'react';
+import { ChefHat } from 'lucide-react';
 import './AdminSidebar.css';
 import gncsarkuteriLogo from '../assets/gncsarkuteri-logo.png';
 
@@ -10,6 +11,7 @@ function AdminSidebar({ activeTab, onTabChange }) {
     { id: 'orders', label: 'Siparişler', icon: '📦' },
     { id: 'products', label: 'Ürünler', icon: '🏷️' },
     { id: 'categories', label: 'Kategoriler', icon: '🗂️' },
+    { id: 'recipes', label: 'Tarifler', icon: <ChefHat size={20} /> },
     { id: 'messages', label: 'Mesajlar', icon: '💬' }
   ];
 

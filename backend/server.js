@@ -31,7 +31,7 @@ const allowedOrigin = process.env.NODE_ENV === 'production'
 
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: 1000,
   standardHeaders: true,
   legacyHeaders: false,
   message: {
@@ -41,7 +41,7 @@ const apiLimiter = rateLimit({
 });
 
 // Middleware
-app.use(helmet());
+app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(cors({ origin: allowedOrigin }));
 app.use(apiLimiter);
 app.use(express.json());
@@ -67,6 +67,7 @@ try {
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/users', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/setup', setupRoutes);

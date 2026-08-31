@@ -1,4 +1,5 @@
 import pool from '../config/database.js';
+import { sendOrderConfirmationEmail } from '../utils/emailService.js';
 
 // Yeni sipariş oluştur
 export const createOrder = async (req, res) => {
@@ -53,6 +54,13 @@ export const createOrder = async (req, res) => {
 
     // Transaction'ı tamamla
     await pool.query('COMMIT');
+
+    // Sipariş onay e-postasını gönder (asenkron, sipariş akışını bekletmez)
+    const recipientEmail = customerEmail || req.user?.email || req.body?.email;
+    sendOrderConfirmationEmail({
+      ...order,
+      cartItems
+    }, recipientEmail).catch(err => console.error('E-posta gönderim hatası:', err));
 
     res.status(201).json({
       success: true,

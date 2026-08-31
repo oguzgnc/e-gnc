@@ -43,11 +43,14 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authAPI.register({ name, email, password });
       if (response.success) {
-        sessionStorage.setItem('token', response.token);
-        setUser(response.user);
-        setIsLoggedIn(true);
-        return { success: true };
+        if (response.token) {
+          sessionStorage.setItem('token', response.token);
+          setUser(response.user);
+          setIsLoggedIn(true);
+        }
+        return { success: true, message: response.message };
       }
+      return { success: false, message: response.message || 'Kayıt başarısız' };
     } catch (error) {
       return { success: false, message: error.message };
     }

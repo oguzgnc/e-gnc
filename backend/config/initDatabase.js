@@ -15,9 +15,18 @@ const initDatabase = async () => {
         email VARCHAR(255) UNIQUE NOT NULL,
         password VARCHAR(255) NOT NULL,
         role VARCHAR(50) DEFAULT 'user',
+        is_verified BOOLEAN DEFAULT false,
+        verification_token VARCHAR(255),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
+    `);
+
+    // Migration: is_verified ve verification_token kolonları yoksa ekle
+    await pool.query(`
+      ALTER TABLE users 
+      ADD COLUMN IF NOT EXISTS is_verified BOOLEAN DEFAULT false,
+      ADD COLUMN IF NOT EXISTS verification_token VARCHAR(255)
     `);
 
     // Create orders table
@@ -152,11 +161,14 @@ const initDatabase = async () => {
       const hashedPassword = await bcrypt.default.hash('admin123', 10);
       
       await pool.query(
-        'INSERT INTO users (name, email, password, role) VALUES ($1, $2, $3, $4)',
-        ['Admin', 'admin@gncsarkuteri.com', hashedPassword, 'admin']
+        'INSERT INTO users (name, email, password, role, is_verified) VALUES ($1, $2, $3, $4, $5)',
+        ['Admin', 'admin@gncsarkuteri.com', hashedPassword, 'admin', true]
       );
       
       console.log('✅ Varsayılan admin hesabı oluşturuldu (admin@gncsarkuteri.com / admin123)');
+    } else {
+      // Mevcut admin kullanıcıyı onaylı yap
+      await pool.query('UPDATE users SET is_verified = true WHERE role = $1', ['admin']);
     }
     
     // Example: If there were DROP TABLE statements, they should be wrapped like:

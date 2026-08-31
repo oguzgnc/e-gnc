@@ -12,13 +12,14 @@ import AdminOrdersPage from './AdminOrdersPage';
 import AdminProductsPage from './AdminProductsPage';
 import AdminContactPage from './AdminContactPage';
 import AdminCategoriesPage from './AdminCategoriesPage';
+import AdminRecipesPage from './AdminRecipesPage';
 import AdminProductModal from './AdminProductModal';
 import './AdminPanel.css';
 
-function AdminPanel() {
+function AdminPanel({ initialTab = 'dashboard' }) {
   const { user, isLoggedIn } = useAuth();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [stats, setStats] = useState(null);
   const [users, setUsers] = useState([]);
   const [orders, setOrders] = useState([]);
@@ -308,6 +309,10 @@ function AdminPanel() {
 
           {activeTab === 'categories' && (
             <AdminCategoriesPage />
+          )}
+
+          {activeTab === 'recipes' && (
+            <AdminRecipesPage />
           )}
 
           {activeTab === 'messages' && (

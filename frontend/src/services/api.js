@@ -54,6 +54,10 @@ export const authAPI = {
   getProfile: async () => {
     return apiCall('/auth/profile');
   },
+
+  verifyEmail: async (token) => {
+    return apiCall(`/users/verify/${token}`);
+  },
 };
 
 // Admin API
@@ -160,6 +164,29 @@ export const recipeAPI = {
 
   getRecipeById: async (recipeId) => {
     return apiCall(`/recipes/${recipeId}`);
+  },
+
+  createRecipe: async (recipeData) => {
+    const token = sessionStorage.getItem('token');
+    const url = `${API_URL}/recipes`;
+    const headers = {};
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    const isFormData = recipeData instanceof FormData;
+    if (!isFormData) headers['Content-Type'] = 'application/json';
+    const response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: isFormData ? recipeData : JSON.stringify(recipeData),
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message || 'Tarif oluşturma başarısız');
+    return data;
+  },
+
+  deleteRecipe: async (recipeId) => {
+    return apiCall(`/recipes/${recipeId}`, {
+      method: 'DELETE',
+    });
   },
 };
 

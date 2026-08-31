@@ -20,6 +20,7 @@ import DistanceSellingContract from './components/DistanceSellingContract.jsx';
 import ReturnPolicyPage from './components/ReturnPolicyPage.jsx';
 import RecipesPage from './components/RecipesPage.jsx';
 import RecipeDetailPage from './components/RecipeDetailPage.jsx';
+import VerifyEmail from './components/VerifyEmail.jsx';
 
 import { CartProvider } from './context/CartContext.jsx'; 
 import { AuthProvider } from './context/AuthContext.jsx';
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
     element: <RecipeDetailPage />,
   },
   {
+    path: "/verify/:token",
+    element: <VerifyEmail />,
+  },
+  {
     path: "/categories/:categoryId", // Kategori detay sayfası yolu
     element: <CategoryPage />, // ! GÜNCELLENDİ: CategoryPage bileşenini gösteriyoruz !
   },
@@ -79,6 +84,14 @@ const router = createBrowserRouter([
   {
     path: "/admin", // Admin paneli
     element: <AdminPanel />, // AdminPanel bileşenini göster
+  },
+  {
+    path: "/admin/tarifler", // Admin Tarif Yönetimi
+    element: <AdminPanel initialTab="recipes" />,
+  },
+  {
+    path: "/admin/recipes", // Alternatif rota
+    element: <AdminPanel initialTab="recipes" />,
   },
   {
     path: "/my-orders", // Siparişlerim sayfası

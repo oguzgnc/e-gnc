@@ -52,8 +52,10 @@ function AuthPage() {
 
         const result = await register(name, email, password);
         if (result.success) {
-          alert('Kayıt başarılı! Hoş geldiniz.');
-          navigate('/');
+          alert(result.message || 'Kayıt başarılı, lütfen e-postanızı doğrulayın.');
+          setIsActive(false); // Giriş ekranına geçiş yap
+          setPassword('');
+          setConfirmPassword('');
         } else {
           setError(result.message || 'Kayıt başarısız');
         }
