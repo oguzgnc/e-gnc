@@ -21,6 +21,7 @@ import ReturnPolicyPage from './components/ReturnPolicyPage.jsx';
 import RecipesPage from './components/RecipesPage.jsx';
 import RecipeDetailPage from './components/RecipeDetailPage.jsx';
 import VerifyEmail from './components/VerifyEmail.jsx';
+import ProfilePage from './components/ProfilePage.jsx';
 
 import { CartProvider } from './context/CartContext.jsx'; 
 import { AuthProvider } from './context/AuthContext.jsx';
@@ -96,6 +97,10 @@ const router = createBrowserRouter([
   {
     path: "/my-orders", // Siparişlerim sayfası
     element: <MyOrdersPage />, // MyOrdersPage bileşenini göster
+  },
+  {
+    path: "/profile",
+    element: <ProfilePage />,
   },
   {
     path: "/auth", // Alternatif giriş yolu

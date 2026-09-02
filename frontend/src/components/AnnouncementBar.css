@@ -1,0 +1,29 @@
+.announcement-bar {
+  width: 100%;
+  overflow: hidden;
+}
+
+.announcement-track {
+  display: inline-flex;
+  min-width: max-content;
+  animation: announcement-marquee 28s linear infinite;
+}
+
+.announcement-bar:hover .announcement-track {
+  animation-play-state: paused;
+}
+
+.announcement-item {
+  display: inline-block;
+  padding: 0 2.5rem;
+  font-weight: 600;
+}
+
+@keyframes announcement-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}

@@ -1,20 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Clock3, ChefHat, ArrowRight, AlertCircle } from 'lucide-react';
-import { recipeAPI } from '../services/api';
+import { ChefHat, AlertCircle } from 'lucide-react';
+import toast from 'react-hot-toast';
+import { favoriteAPI, recipeAPI } from '../services/api';
 import Navbar from './Navbar';
+import RecipeCard from './RecipeCard';
 import './RecipesPage.css';
-
-const API_ORIGIN = import.meta.env.VITE_API_URL
-  ? import.meta.env.VITE_API_URL.replace(/\/api$/, '')
-  : 'http://localhost:5000';
-
-const getImageUrl = (imageUrl) => {
-  if (!imageUrl) return '';
-  return imageUrl.startsWith('/uploads') || imageUrl.startsWith('/api/uploads')
-    ? `${API_ORIGIN}${imageUrl}`
-    : imageUrl;
-};
 
 function RecipeCardSkeleton() {
   return (
@@ -31,6 +21,8 @@ function RecipeCardSkeleton() {
 
 function RecipesPage() {
   const [recipes, setRecipes] = useState([]);
+  const [favoriteRecipes, setFavoriteRecipes] = useState(new Set());
+  const [favoriteLoading, setFavoriteLoading] = useState(new Set());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -50,11 +42,49 @@ function RecipesPage() {
     fetchRecipes();
   }, []);
 
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      if (!sessionStorage.getItem('token')) return;
+      try {
+        const response = await favoriteAPI.getFavorites();
+        setFavoriteRecipes(new Set((response.favorites || []).map(recipe => recipe.id)));
+      } catch (fetchError) {
+        console.error('Favoriler yüklenemedi:', fetchError);
+      }
+    };
+
+    fetchFavorites();
+  }, []);
+
+  const toggleFavorite = async (recipeId) => {
+    if (favoriteLoading.has(recipeId)) return;
+    setFavoriteLoading(previousLoading => new Set(previousLoading).add(recipeId));
+
+    try {
+      const response = await favoriteAPI.toggleFavorite(recipeId);
+      setFavoriteRecipes(previousFavorites => {
+        const nextFavorites = new Set(previousFavorites);
+        if (response.isFavorite) nextFavorites.add(recipeId);
+        else nextFavorites.delete(recipeId);
+        return nextFavorites;
+      });
+      toast.success(response.isFavorite ? 'Tarif favorilere eklendi!' : 'Tarif favorilerden çıkarıldı.');
+    } catch (toggleError) {
+      toast.error(toggleError.message || 'Favori güncellenemedi.');
+    } finally {
+      setFavoriteLoading(previousLoading => {
+        const nextLoading = new Set(previousLoading);
+        nextLoading.delete(recipeId);
+        return nextLoading;
+      });
+    }
+  };
+
   return (
     <div className="recipes-page">
       <Navbar />
       <main className="recipes-page-main">
-        <header className="recipes-page-header">
+        <header className="recipes-page-header flex flex-col items-center text-center mb-10">
           <span className="recipes-page-kicker"><ChefHat size={18} /> GNChol mutfağından</span>
           <h1>Şefin Önerileri</h1>
           <p>Seçtiğiniz tarifi keşfedin, gerekli malzemeleri tek seferde sepetinize ekleyin.</p>
@@ -80,25 +110,13 @@ function RecipesPage() {
         {!loading && !error && recipes.length > 0 && (
           <div className="recipes-grid">
             {recipes.map((recipe) => (
-              <article className="recipe-card" key={recipe.id}>
-                <Link to={`/tarifler/${recipe.id}`} className="recipe-card-image-link">
-                  {recipe.image_url ? (
-                    <img src={getImageUrl(recipe.image_url)} alt={recipe.title} className="recipe-card-image" />
-                  ) : (
-                    <div className="recipe-card-image recipe-card-image-placeholder"><ChefHat size={42} /></div>
-                  )}
-                </Link>
-                <div className="recipe-card-body">
-                  <h2>{recipe.title}</h2>
-                  <div className="recipe-card-meta">
-                    <Clock3 size={17} aria-hidden="true" />
-                    <span>{recipe.prep_time || 'Süre belirtilmedi'}</span>
-                  </div>
-                  <Link to={`/tarifler/${recipe.id}`} className="recipe-card-link">
-                    Tarifi İncele <ArrowRight size={17} aria-hidden="true" />
-                  </Link>
-                </div>
-              </article>
+              <RecipeCard
+                key={recipe.id}
+                recipe={recipe}
+                isFavorite={favoriteRecipes.has(recipe.id)}
+                isFavoriteLoading={favoriteLoading.has(recipe.id)}
+                onToggleFavorite={toggleFavorite}
+              />
             ))}
           </div>
         )}

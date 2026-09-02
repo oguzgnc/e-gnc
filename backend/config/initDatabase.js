@@ -74,6 +74,16 @@ const initDatabase = async () => {
       )
     `);
 
+    // Kullanıcıların tarif favorileri
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS favorites (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        recipe_id INTEGER NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
+        UNIQUE (user_id, recipe_id)
+      )
+    `);
+
     // Kategoriler tablosu
     await pool.query(`
       CREATE TABLE IF NOT EXISTS categories (

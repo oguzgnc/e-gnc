@@ -13,8 +13,12 @@
 }
 
 .recipes-page-header {
-  max-width: 650px;
-  margin-bottom: 42px;
+  max-width: 720px;
+  margin: 0 auto 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .recipes-page-kicker,
@@ -30,16 +34,18 @@
 }
 
 .recipes-page-header h1 {
-  margin: 14px 0 12px;
-  color: #123d34;
+  margin: 14px 0 16px;
+  color: #064e3b;
   font-family: 'Poppins', sans-serif;
-  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-size: clamp(2.25rem, 5vw, 3.2rem);
+  font-weight: 700;
   line-height: 1.08;
 }
 
 .recipes-page-header p {
-  margin: 0;
-  color: #60736d;
+  max-width: 42rem;
+  margin: 0 auto;
+  color: #4b5563;
   font-size: 1.05rem;
   line-height: 1.7;
 }
@@ -66,6 +72,39 @@
 
 .recipe-card-image-link {
   display: block;
+}
+
+.recipe-card-image-wrapper {
+  position: relative;
+}
+
+.recipe-favorite-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  border: 0;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #64748b;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.16);
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 2;
+}
+
+.recipe-favorite-button:hover {
+  color: #dc2626;
+  transform: scale(1.08);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.2);
+}
+
+.recipe-favorite-button.is-favorite {
+  color: #dc2626;
 }
 
 .recipe-card-image,

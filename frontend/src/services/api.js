@@ -190,6 +190,20 @@ export const recipeAPI = {
   },
 };
 
+// Favorites API
+export const favoriteAPI = {
+  getFavorites: async () => {
+    return apiCall('/favorites');
+  },
+
+  toggleFavorite: async (recipeId) => {
+    return apiCall('/favorites/toggle', {
+      method: 'POST',
+      body: JSON.stringify({ recipe_id: recipeId }),
+    });
+  },
+};
+
 // Order API
 export const orderAPI = {
   createOrder: async (orderData) => {

@@ -2,9 +2,9 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import './Navbar.css'; 
-import { FaUser, FaShoppingCart, FaBars, FaSearch, FaSignOutAlt, FaUserShield, FaClipboardList } from 'react-icons/fa'; 
+import { FaUser, FaShoppingCart, FaBars, FaSearch, FaUserShield, FaClipboardList } from 'react-icons/fa'; 
 // ! GÜNCELLENDİ: Link yerine NavLink import ediyoruz !
-import { NavLink, useNavigate } from 'react-router-dom'; 
+import { NavLink } from 'react-router-dom'; 
 import { useCart } from '../context/CartContext'; 
 import { useAuth } from '../context/AuthContext';
 import { products } from '../data/products'; // Ürün verilerini import ediyoruz
@@ -12,8 +12,7 @@ import gncsarkuteriLogo from '../assets/gncsarkuteri-logo.png'; // Logonuzu impo
 
 function Navbar() {
   const { getCartItemCount } = useCart(); 
-  const { isLoggedIn, user, logout } = useAuth();
-  const navigate = useNavigate();
+  const { isLoggedIn, user } = useAuth();
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -133,13 +132,10 @@ function Navbar() {
           </NavLink>
         )}
         {isLoggedIn ? (
-          <button className="nav-icon-link logout-button" onClick={() => {
-            logout();
-            navigate('/');
-          }}>
-            <FaSignOutAlt className="nav-icon" />
-            <span>Çıkış Yap</span>
-          </button>
+          <NavLink to="/profile" className="nav-icon-link">
+            <FaUser className="nav-icon" />
+            <span>Hesabım</span>
+          </NavLink>
         ) : (
           <NavLink to="/login" className="nav-icon-link">
             <FaUser className="nav-icon" />

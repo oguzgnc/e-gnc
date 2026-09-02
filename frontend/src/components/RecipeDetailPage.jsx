@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { ArrowLeft, ChefHat, Clock3, ShoppingBasket, AlertCircle } from 'lucide-react';
+import { ArrowLeft, ChefHat, Clock3, Heart, ShoppingBasket, AlertCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useCart } from '../context/CartContext';
-import { recipeAPI } from '../services/api';
+import { favoriteAPI, recipeAPI } from '../services/api';
 import Navbar from './Navbar';
 import './RecipeDetailPage.css';
 
@@ -38,6 +38,8 @@ function RecipeDetailPage() {
   const [ingredients, setIngredients] = useState([]);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [isAdding, setIsAdding] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavoriteLoading, setIsFavoriteLoading] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -49,6 +51,15 @@ function RecipeDetailPage() {
         const nextIngredients = response.ingredients || [];
         setIngredients(nextIngredients);
         setSelectedIngredients(nextIngredients.map(product => product.id));
+
+        if (sessionStorage.getItem('token')) {
+          try {
+            const favoritesResponse = await favoriteAPI.getFavorites();
+            setIsFavorite((favoritesResponse.favorites || []).some(favorite => favorite.id === response.recipe.id));
+          } catch (favoriteError) {
+            console.error('Tarif favori durumu yüklenemedi:', favoriteError);
+          }
+        }
       } catch (fetchError) {
         console.error('Tarif detayı yüklenemedi:', fetchError);
         setError(fetchError.message || 'Tarif detayı yüklenirken bir hata oluştu.');
@@ -82,6 +93,21 @@ function RecipeDetailPage() {
       toast.success('Seçili malzemeler başarıyla sepete eklendi! 🍳');
     } finally {
       setIsAdding(false);
+    }
+  };
+
+  const toggleFavorite = async () => {
+    if (isFavoriteLoading) return;
+    setIsFavoriteLoading(true);
+
+    try {
+      const response = await favoriteAPI.toggleFavorite(recipe.id);
+      setIsFavorite(response.isFavorite);
+      toast.success(response.isFavorite ? 'Tarif favorilere eklendi!' : 'Tarif favorilerden çıkarıldı.');
+    } catch (toggleError) {
+      toast.error(toggleError.message || 'Favori güncellenemedi.');
+    } finally {
+      setIsFavoriteLoading(false);
     }
   };
 
@@ -122,11 +148,23 @@ function RecipeDetailPage() {
         <Link to="/tarifler" className="recipe-back-link"><ArrowLeft size={17} /> Tariflere dön</Link>
         <div className="recipe-detail-layout">
           <section className="recipe-detail-story">
-            {recipe.image_url ? (
-              <img src={getImageUrl(recipe.image_url)} alt={recipe.title} className="recipe-detail-image" />
-            ) : (
-              <div className="recipe-detail-image recipe-detail-image-placeholder"><ChefHat size={64} /></div>
-            )}
+            <div className="recipe-detail-image-wrapper">
+              {recipe.image_url ? (
+                <img src={getImageUrl(recipe.image_url)} alt={recipe.title} className="recipe-detail-image" />
+              ) : (
+                <div className="recipe-detail-image recipe-detail-image-placeholder"><ChefHat size={64} /></div>
+              )}
+              <button
+                type="button"
+                className={`recipe-detail-favorite-button ${isFavorite ? 'is-favorite' : ''}`}
+                onClick={toggleFavorite}
+                disabled={isFavoriteLoading}
+                aria-label={isFavorite ? 'Tarifi favorilerden çıkar' : 'Tarifi favorilere ekle'}
+                aria-pressed={isFavorite}
+              >
+                <Heart size={23} fill={isFavorite ? 'currentColor' : 'none'} />
+              </button>
+            </div>
             <div className="recipe-detail-heading">
               <div>
                 <span className="recipe-detail-kicker">Şefin mutfağından</span>

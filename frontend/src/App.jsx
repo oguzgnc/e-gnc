@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css'; // Ana uygulama stilleri
 import Navbar from './components/Navbar'; 
+import AnnouncementBar from './components/AnnouncementBar';
 import { Link } from 'react-router-dom'; // Link bileşenini import ediyoruz
 
 // ! Tüm bileşen import'ları burada yer almalı !
@@ -42,6 +43,7 @@ function App() {
   return (
     <div className="App">
       <Navbar /> 
+      <AnnouncementBar />
       <HeroSection /> 
 
       <main className="main-content">
